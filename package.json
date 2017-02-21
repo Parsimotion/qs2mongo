@@ -1,6 +1,6 @@
 {
   "name": "qs2mongo",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "qs2mongo",
   "main": "index.js",
   "scripts": {
