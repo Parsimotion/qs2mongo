@@ -3,6 +3,7 @@ _ = require("lodash")
 module.exports =
   class Qs2Mongo
     @defaultOmitableProperties: ['by', 'ids', 'attributes', 'offset', 'limit', 'sort' ]
+    @operators: [ '$lt', '$gt','$lte', '$gte','$in','$nin' ]
 
     constructor: ({ @defaultSort, @idField = "id", @multigetIdField = "_id", @filterableBooleans = [], @omitableProperties = Qs2Mongo.defaultOmitableProperties}) ->
 
@@ -24,7 +25,16 @@ module.exports =
     _getFilters_: (req, strict) =>
       filters = if strict then @buildFilters(req)
       else @buildSearch(req)
-      @_makeOrFilters filters
+      filtersWithoutOperators = @_makeOrFilters filters
+      filtersWithOperators = _.map filtersWithoutOperators, (value,field) =>
+        operator = _.find @operators, (operator) => _.endsWith field, "__#{operator}"
+        return {"#{field}":value} unless operator?
+        name = field.replace "__#{operator}", ""
+        "#{name}": "#{operator}": value
+
+      rv = {}
+      filtersWithOperators.forEach (it) => _.assign rv, it
+      rv
 
     _makeOrFilters: (filters) =>
       _toCondition = _.curry (value, fieldNames) ->
