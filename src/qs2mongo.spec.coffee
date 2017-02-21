@@ -112,6 +112,7 @@ describe "Qs2Mongo", ->
         ]
 
     describe "Multiget", ->
+        
       it "should build multiget filters using strict", ->
         multigetReq = query: ids: ["unId","otroId"].join()
         qs2mongo.parse multigetReq, strict: true
@@ -124,7 +125,12 @@ describe "Qs2Mongo", ->
         .filters.should.eql
           _id: $in: ["unId","otroId"]
 
-
+      it "should build multiget filters using a custom property", ->
+        qs2mongo.multigetIdField = "custom_id"
+        multigetReq = query: ids: ["unId","otroId"].join()
+        qs2mongo.parse multigetReq
+        .filters.should.eql
+          custom_id: $in: ["unId","otroId"]
 
     describe "Operators", ->
 
