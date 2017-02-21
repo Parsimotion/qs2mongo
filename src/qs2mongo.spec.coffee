@@ -1,7 +1,7 @@
 _ = require("lodash")
 should = require("should")
 Qs2Mongo = require("./qs2mongo")
-{ qs2mongo, req } = {}
+{ qs2mongo, req, multigetReq } = {}
   
 describe "Qs2Mongo", ->
   beforeEach ->
@@ -14,6 +14,7 @@ describe "Qs2Mongo", ->
         attributes:"aField,anotherField"
         limit: "10"
         offset: "20"
+    multigetReq = query: ids: ["unId","otroId"].join()
     qs2mongo = new Qs2Mongo 
       filterableBooleans: ["aBooleanField"]
       defaultSort: "_id"
@@ -114,20 +115,17 @@ describe "Qs2Mongo", ->
     describe "Multiget", ->
         
       it "should build multiget filters using strict", ->
-        multigetReq = query: ids: ["unId","otroId"].join()
         qs2mongo.parse multigetReq, strict: true
         .filters.should.eql
           _id: $in: ["unId","otroId"]
 
       it "should build multiget filters without using strict", ->
-        multigetReq = query: ids: ["unId","otroId"].join()
         qs2mongo.parse multigetReq
         .filters.should.eql
           _id: $in: ["unId","otroId"]
 
       it "should build multiget filters using a custom property", ->
         qs2mongo.multigetIdField = "custom_id"
-        multigetReq = query: ids: ["unId","otroId"].join()
         qs2mongo.parse multigetReq
         .filters.should.eql
           custom_id: $in: ["unId","otroId"]
