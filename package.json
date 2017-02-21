@@ -1,0 +1,34 @@
+{
+  "name": "qs2mongo",
+  "version": "0.0.0",
+  "description": "qs2mongo",
+  "main": "index.js",
+  "scripts": {
+    "test": "grunt test",
+    "prepublish": "grunt build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Parsimotion/qs2mongo.git"
+  },
+  "dependencies": {
+    "lodash": "4.15.0",
+    "bluebird": "3.4.1",
+    "coffee-script": "1.11.0"
+  },
+  "devDependencies": {
+    "grunt": "1.0.1",
+    "grunt-bump": "0.8.0",
+    "grunt-contrib-clean": "1.0.0",
+    "grunt-contrib-coffee": "1.0.0",
+    "grunt-mocha-test": "0.12.7",
+    "mocha": "3.0.2",
+    "should": "11.1.0"
+  },
+  "author": "Parsimotion",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Parsimotion/qs2mongo/issues"
+  },
+  "homepage": "https://github.com/Parsimotion/qs2mongo#readme"
+}
