@@ -44,42 +44,43 @@ describe "Qs2Mongo", ->
         anotherField:1
   
   describe "Options", ->
-    
-    it "should build options with default sort", ->
-      qs2mongo.parse req
-      .options.should.eql
-        limit: 10
-        offset: 20
-        sort: 
+    describe "Sort", ->
+
+      it "should build options with default sort", ->
+        qs2mongo.defaultSort = "_id"
+        qs2mongo.parse req
+        .options.sort.should.eql
           _id: 1
 
-    it "should build options with ascending sort", ->
-      sort = "aField"
-      _.assign req.query, { sort }
-      qs2mongo.parse req
-      .options.should.eql
-        limit: 10
-        offset: 20
-        sort: 
+      it "should build options with ascending sort", ->
+        sort = "aField"
+        _.assign req.query, { sort }
+        qs2mongo.parse req
+        .options.sort.should.eql
           aField: 1
 
-    it "should build options with descending sort", ->
-      sort = "-aField"
-      _.assign req.query, { sort }
-      qs2mongo.parse req
-      .options.should.eql
-        limit: 10
-        offset: 20
-        sort: 
+      it "should build options with descending sort", ->
+        sort = "-aField"
+        _.assign req.query, { sort }
+        qs2mongo.parse req
+        .options.sort.should.eql
           aField: -1
     
-    it "should build options without limit and offset options", ->
-      delete req.query.limit
-      delete req.query.offset
-      qs2mongo.parse req
-      .options.should.eql
-        sort: 
-          _id: 1
+    describe "Limit and offset", ->
+    
+      it "should build options with limit and offset when valid", ->
+        qs2mongo.defaultSort = "_id"
+        qs2mongo.parse req
+        .options.should.containDeep
+          limit: 10
+          offset: 20
+
+      it "should build options without limit and offset options", ->
+        delete req.query.limit
+        delete req.query.offset
+        { options } = qs2mongo.parse req
+        should.not.exist options.limit
+        should.not.exist options.offset
 
   describe "Filters", ->
 
