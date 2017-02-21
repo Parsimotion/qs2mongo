@@ -14,6 +14,11 @@ module.exports =
       @omitableProperties = Qs2Mongo.defaultOmitableProperties
     }) ->
 
+    middleware: (req, res, next) ->
+      mongo = @parse req
+      _.assign req, { mongo }
+      next()
+    
     parse: (req, { strict } = {}) =>
       { query: {limit, offset,sort} } = req
       filters = @_getFilters_ req, strict

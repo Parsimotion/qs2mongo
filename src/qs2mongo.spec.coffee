@@ -41,6 +41,28 @@ describe "Qs2Mongo", ->
         offset: 20
         sort: 
           _id: 1
+  
+    it "When used as middleware should set mongo property in req object", (done)->
+      qs2mongo.middleware req, _, ->
+        req.mongo.should.eql 
+          filters: 
+            aField: /aValue/i
+            anotherField: /anotherValue/i
+            aBooleanField: false
+            $or: [
+              { fields:/theOrValue/i }
+              { joinedByOr: /theOrValue/i }
+            ]
+          projection: 
+            aField:1
+            anotherField:1
+          options:
+            limit: 10
+            offset: 20
+            sort: 
+              _id: 1
+
+        done()
 
   describe "Projection", ->
     it "should build projection", ->
@@ -169,3 +191,4 @@ describe "Qs2Mongo", ->
         qs2mongo.parse {query: aDateField__gt: aDate.toISOString()}
         .filters.should.eql
           aDateField: $gt: aDate
+      
