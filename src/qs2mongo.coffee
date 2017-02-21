@@ -80,7 +80,6 @@ module.exports =
       filters = _.clone query
       propertiesToOmit = @omitableProperties
       idFilters = @buildIdFilters filters.ids
-
       @castBooleanFilters filters
 
       _(filters)

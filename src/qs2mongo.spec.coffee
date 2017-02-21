@@ -111,10 +111,11 @@ describe "Qs2Mongo", ->
           { joinedByOr: "theOrValue" }
         ]
 
-    it "should build multiget filters", ->
+    it.only "should build multiget filters", ->
       multigetReq = query: ids: ["unId","otroId"].join()
-      qs2mongo.parse multigetReq
-      .filters.should.eql
+      a = qs2mongo.parse multigetReq, strict: true
+      console.log a
+      a.filters.should.eql
         _id: $in: ["unId","otroId"]
 
 
