@@ -75,12 +75,13 @@ module.exports =
       (value?.toLowerCase?() ? _default?.toString()) == 'true'
 
     buildSearch: ({query}) =>
+      filterableDates = @_mergeWithOperators @filterableDates
       search = _.omit query, 
         @filterableBooleans
         .concat @omitableProperties
-        .concat @filterableDates
+        .concat filterableDates
       booleans = _.pick query, @filterableBooleans
-      dates = _.pick query, @filterableDates
+      dates = _.pick query, filterableDates
       @castBooleanFilters booleans
       @castDateFilters dates
       idFilters = @buildIdFilters query.ids

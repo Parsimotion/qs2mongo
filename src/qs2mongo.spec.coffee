@@ -164,3 +164,8 @@ describe "Qs2Mongo", ->
         qs2mongo.parse {query: aDateField__gt: aDate.toISOString()}, strict: true
         .filters.should.eql
           aDateField: $gt: aDate
+
+      it "should build filters with date operator without strict", ->
+        qs2mongo.parse {query: aDateField__gt: aDate.toISOString()}
+        .filters.should.eql
+          aDateField: $gt: aDate
