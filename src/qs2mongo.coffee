@@ -58,8 +58,9 @@ module.exports =
       search = _.omit query, @filterableBooleans.concat @omitableProperties
       booleans = _.pick query, @filterableBooleans
       @castBooleanFilters booleans
+      idFilters = @buildIdFilters query.ids
 
-      _.merge booleans, @_asLikeIgnoreCase search
+      _.merge booleans, idFilters, @_asLikeIgnoreCase search
 
     _asLikeIgnoreCase: (search) ->
       _.reduce search, ((result, value, field) ->
