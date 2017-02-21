@@ -25,8 +25,8 @@ describe "Qs2Mongo", ->
         aBooleanField: false
         $or: [
           { fields:/theOrValue/i }
-          {joinedByOr: /theOrValue/i }
-          ]
+          { joinedByOr: /theOrValue/i }
+        ]
       projection: 
         aField:1
         anotherField:1
@@ -35,7 +35,6 @@ describe "Qs2Mongo", ->
         offset: "20"
         sort: 
           _id: 1
-
 
   describe "Projection", ->
     it "should build projection", ->
@@ -84,7 +83,7 @@ describe "Qs2Mongo", ->
         aBooleanField: false
         $or: [
           { fields:/theOrValue/i }
-          {joinedByOr: /theOrValue/i }
+          { joinedByOr: /theOrValue/i }
         ]
 
     it "should build filters with equal if using strict", ->
@@ -95,5 +94,5 @@ describe "Qs2Mongo", ->
         aBooleanField: false
         $or: [
           { fields: "theOrValue" }
-          {joinedByOr: "theOrValue" }
-          ]
+          { joinedByOr: "theOrValue" }
+        ]
