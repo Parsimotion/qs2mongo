@@ -119,7 +119,7 @@ describe "Qs2Mongo", ->
       .filters.should.eql
         aDateField: aDate
 
-    it.only "should get date filters as dates if not strict", ->
+    it "should get date filters as dates if not strict", ->
       qs2mongo.parse dateReq
       .filters.should.eql
         aDateField: aDate
@@ -149,7 +149,7 @@ describe "Qs2Mongo", ->
         .filters.should.eql
           aField: $gt: "23"
 
-      it "should build filters with mixed operator", ->
+      it "should build filters with mixed operators", ->
         qs2mongo.parse 
           query: 
             aField__gt: "23"
@@ -159,3 +159,8 @@ describe "Qs2Mongo", ->
           aField: $gt: "23"
           anotherField: $lt: "42"
           yetAnotherField: /aValue/i
+
+      it "should build filters with date operator", ->
+        qs2mongo.parse {query: aDateField__gt: aDate.toISOString()}, strict: true
+        .filters.should.eql
+          aDateField: $gt: aDate

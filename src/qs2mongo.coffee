@@ -40,7 +40,6 @@ module.exports =
         operator = _.find Qs2Mongo.operators, (operator) => _.endsWith field, "__#{operator}"
         return {"#{field}":value} unless operator?
         name = field.replace "__#{operator}", ""
-        console.log name, value if name is "aDateField"
         "#{name}": "$#{operator}": value.source or value
       rv = {}
       filtersWithOperators.forEach (it) => _.assign rv, it
@@ -119,10 +118,12 @@ module.exports =
     castDateFilters: (query) =>
       @_transformFilters query, @filterableDates, (it) -> new Date it.source or it
     #This has effect
-    _transformFilters: (query, filters, transformation) =>
-      filters.forEach (field) =>
+    _transformFilters: (query, fields, transformation) =>
+      filtersWithOperators = _.flatMap fields, (field) =>
+        Qs2Mongo.operators.map (it)=> "#{field}__#{it}"
+        .concat field
+      filtersWithOperators.forEach (field) =>
         query[field] = transformation query[field] if query[field]?
-
     buildIdFilters: (ids) =>
       if ids?
         _({})
