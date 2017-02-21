@@ -4,7 +4,7 @@ module.exports =
   class Qs2Mongo
     @defaultOmitableProperties: ['by', 'ids', 'attributes', 'offset', 'limit', 'sort' ]
 
-    constructor: ({ @idField = "id", @multigetIdField = "_id", @filterableBooleans = [], @omitableProperties = Qs2Mongo.defaultOmitableProperties}) ->
+    constructor: ({ @defaultSort = "_id", @idField = "id", @multigetIdField = "_id", @filterableBooleans = [], @omitableProperties = Qs2Mongo.defaultOmitableProperties}) ->
 
     parse: (req, { strict } = {}) =>
       { query: {limit, offset,sort} } = req
@@ -69,11 +69,12 @@ module.exports =
 
     _omitableProperties: => ['by', 'ids', 'attributes', 'offset', 'limit', 'sort' ]
 
-    buildSort: (field = "_id") =>
-      descending = field.startsWith("-")
-      if descending
-        field = field.substr 1
-      { "#{field}": if descending then -1 else 1 }
+    buildSort: (field = @defaultSort) =>
+      if field?
+        descending = field.startsWith("-")
+        if descending
+          field = field.substr 1
+        { "#{field}": if descending then -1 else 1 }
 
     buildFilters: ({query}) =>
       filters = _.clone query
