@@ -10,8 +10,11 @@ module.exports =
       { query: {limit, offset,sort} } = req
       filters = @_getFilters_ req, strict
       projection = @buildAttributes req.query
-      options = { limit, offset, sort: @buildSort(sort) }
+      options = @buildOptions req
       { filters, projection, options }
+    
+    buildOptions: ({query: {limit, offset, sort}}) =>
+      { limit, offset, sort: @buildSort(sort) }
 
     _getFilters_: (req, strict) =>
       filters = if strict then @buildFilters(req)
