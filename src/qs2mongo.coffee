@@ -5,7 +5,14 @@ module.exports =
     @defaultOmitableProperties: ['by', 'ids', 'attributes', 'offset', 'limit', 'sort' ]
     @operators: [ 'lt', 'gt','lte', 'gte','in','nin','eq' ]
 
-    constructor: ({ @defaultSort, @idField = "id", @multigetIdField = "_id", @filterableBooleans = [], @omitableProperties = Qs2Mongo.defaultOmitableProperties}) ->
+    constructor: ({ 
+      @defaultSort, 
+      @idField = "id", 
+      @multigetIdField = "_id", 
+      @filterableBooleans = [], 
+      @filterableDates = [], 
+      @omitableProperties = Qs2Mongo.defaultOmitableProperties
+    }) ->
 
     parse: (req, { strict } = {}) =>
       { query: {limit, offset,sort} } = req
@@ -51,6 +58,7 @@ module.exports =
       idFilters = @buildIdFilters filters.ids
 
       @castBooleanFilters filters
+      @castDateFilters filters
 
       _(filters)
       .omit propertiesToOmit
@@ -99,8 +107,13 @@ module.exports =
       .value()
 
     castBooleanFilters: (query) =>
-      @filterableBooleans.forEach (field) =>
-        query[field] = @stringToBoolean query[field] if query[field]?
+      @_transformFilters query, @filterableBooleans, @stringToBoolean
+    castDateFilters: (query) =>
+      @_transformFilters query, @filterableDates, (it) -> new Date it
+    #This has effect
+    _transformFilters: (query, filters, transformation) =>
+      filters.forEach (field) =>
+        query[field] = transformation query[field] if query[field]?
 
     buildIdFilters: (ids) =>
       if ids?
