@@ -1,7 +1,7 @@
 _ = require("lodash")
 should = require("should")
 Qs2Mongo = require("./qs2mongo")
-{ qs2mongo, req, multigetReq } = {}
+{ qs2mongo, req, multigetReq, aDate, dateReq } = {}
   
 describe "Qs2Mongo", ->
   beforeEach ->
@@ -15,8 +15,11 @@ describe "Qs2Mongo", ->
         limit: "10"
         offset: "20"
     multigetReq = query: ids: ["unId","otroId"].join()
+    aDate = new Date("1999/01/02")
+    dateReq = query: aDateField: aDate.toISOString()
     qs2mongo = new Qs2Mongo 
       filterableBooleans: ["aBooleanField"]
+      filterableDates: ["aDateField"]
       defaultSort: "_id"
 
   it "should build everything in a query string", ->
@@ -111,6 +114,15 @@ describe "Qs2Mongo", ->
           { fields: "theOrValue" }
           { joinedByOr: "theOrValue" }
         ]
+    it "should get date filters as dates", ->
+      qs2mongo.parse dateReq, strict: true
+      .filters.should.eql
+        aDateField: aDate
+
+    it.only "should get date filters as dates if not strict", ->
+      qs2mongo.parse dateReq
+      .filters.should.eql
+        aDateField: aDate
 
     describe "Multiget", ->
         

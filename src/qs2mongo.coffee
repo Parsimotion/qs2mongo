@@ -32,13 +32,16 @@ module.exports =
     _getFilters_: (req, strict) =>
       filters = if strict then @buildFilters(req)
       else @buildSearch(req)
-      filtersWithoutOperators = @_makeOrFilters filters
-      
-      filtersWithOperators = _.map filtersWithoutOperators, (value,field) =>
+      filtersWithUnparsedOperators = @_makeOrFilters filters
+      @_parseOperators filtersWithUnparsedOperators
+
+    _parseOperators: (filtersWithUnparsedOperators) =>
+      filtersWithOperators = _.map filtersWithUnparsedOperators, (value,field) =>
         operator = _.find Qs2Mongo.operators, (operator) => _.endsWith field, "__#{operator}"
         return {"#{field}":value} unless operator?
         name = field.replace "__#{operator}", ""
-        "#{name}": "$#{operator}": if strict then value else value.source
+        console.log name, value if name is "aDateField"
+        "#{name}": "$#{operator}": value.source or value
       rv = {}
       filtersWithOperators.forEach (it) => _.assign rv, it
       rv
@@ -73,12 +76,16 @@ module.exports =
       (value?.toLowerCase?() ? _default?.toString()) == 'true'
 
     buildSearch: ({query}) =>
-      search = _.omit query, @filterableBooleans.concat @omitableProperties
+      search = _.omit query, 
+        @filterableBooleans
+        .concat @omitableProperties
+        .concat @filterableDates
       booleans = _.pick query, @filterableBooleans
+      dates = _.pick query, @filterableDates
       @castBooleanFilters booleans
+      @castDateFilters dates
       idFilters = @buildIdFilters query.ids
-
-      _.merge booleans, idFilters, @_asLikeIgnoreCase search
+      _.merge dates, booleans, idFilters, @_asLikeIgnoreCase search
 
     _asLikeIgnoreCase: (search) ->
       _.reduce search, ((result, value, field) ->
@@ -100,6 +107,7 @@ module.exports =
       propertiesToOmit = @omitableProperties
       idFilters = @buildIdFilters filters.ids
       @castBooleanFilters filters
+      @castDateFilters filters
 
       _(filters)
       .omit propertiesToOmit
@@ -109,7 +117,7 @@ module.exports =
     castBooleanFilters: (query) =>
       @_transformFilters query, @filterableBooleans, @stringToBoolean
     castDateFilters: (query) =>
-      @_transformFilters query, @filterableDates, (it) -> new Date it
+      @_transformFilters query, @filterableDates, (it) -> new Date it.source or it
     #This has effect
     _transformFilters: (query, filters, transformation) =>
       filters.forEach (field) =>
