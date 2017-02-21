@@ -126,3 +126,20 @@ describe "Qs2Mongo", ->
 
 
 
+    describe "Operators", ->
+
+      it "should build filters with operator", ->
+        qs2mongo.parse query: aField__gt: "23"
+        .filters.should.eql
+          aField: $gt: "23"
+
+      it "should build filters with mixed operator", ->
+        qs2mongo.parse 
+          query: 
+            aField__gt: "23"
+            anotherField__lt: "42"
+            yetAnotherField: "aValue"
+        .filters.should.eql
+          aField: $gt: "23"
+          anotherField: $lt: "42"
+          yetAnotherField: /aValue/i
