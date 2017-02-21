@@ -118,12 +118,14 @@ module.exports =
 
     castDateFilters: (query) =>
       @_transformFilters query, @filterableDates, (it) -> new Date it.source or it
-
-    #This has effect
-    _transformFilters: (query, fields, transformation) =>
-      filtersWithOperators = _.flatMap fields, (field) =>
+    
+    _mergeWithOperators: (fields) =>
+      _.flatMap fields, (field) =>
         Qs2Mongo.operators.map (it)=> "#{field}__#{it}"
-        .concat field
+          .concat field
+      #This has effect
+    _transformFilters: (query, fields, transformation) =>
+      filtersWithOperators = @_mergeWithOperators fields
       filtersWithOperators.forEach (field) =>
         query[field] = transformation query[field] if query[field]?
 
