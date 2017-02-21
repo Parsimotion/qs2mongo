@@ -115,8 +115,10 @@ module.exports =
 
     castBooleanFilters: (query) =>
       @_transformFilters query, @filterableBooleans, @stringToBoolean
+
     castDateFilters: (query) =>
       @_transformFilters query, @filterableDates, (it) -> new Date it.source or it
+
     #This has effect
     _transformFilters: (query, fields, transformation) =>
       filtersWithOperators = _.flatMap fields, (field) =>
@@ -124,6 +126,7 @@ module.exports =
         .concat field
       filtersWithOperators.forEach (field) =>
         query[field] = transformation query[field] if query[field]?
+
     buildIdFilters: (ids) =>
       if ids?
         _({})
