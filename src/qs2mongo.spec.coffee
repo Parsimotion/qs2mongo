@@ -46,6 +46,11 @@ describe "Qs2Mongo", ->
   describe "Options", ->
     describe "Sort", ->
 
+      it "should build options without any sort", ->
+        qs2mongo.defaultSort = null
+        { options } = qs2mongo.parse req
+        should.not.exist options.sort
+
       it "should build options with default sort", ->
         qs2mongo.defaultSort = "_id"
         qs2mongo.parse req
