@@ -89,7 +89,6 @@ describe "Qs2Mongo", ->
         should.not.exist options.offset
 
   describe "Filters", ->
-
     it "should build filters with like ignore case if not using strict", ->
       qs2mongo.parse req
       .filters.should.eql
@@ -111,3 +110,12 @@ describe "Qs2Mongo", ->
           { fields: "theOrValue" }
           { joinedByOr: "theOrValue" }
         ]
+
+    it "should build multiget filters", ->
+      multigetReq = query: ids: ["unId","otroId"].join()
+      qs2mongo.parse multigetReq
+      .filters.should.eql
+        _id: $in: ["unId","otroId"]
+
+
+

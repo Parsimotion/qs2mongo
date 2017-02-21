@@ -48,7 +48,7 @@ module.exports =
       .value()
 
     buildAttributes: (query) ->
-      attributes = query.attributes.split ','
+      attributes = query.attributes?.split ','
       _.zipObject attributes, _.times(attributes?.length, -> 1)
 
     stringToBoolean: (value,_default) ->
