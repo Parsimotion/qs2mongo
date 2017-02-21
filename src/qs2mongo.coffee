@@ -4,7 +4,7 @@ module.exports =
   class Qs2Mongo
     @defaultOmitableProperties: ['by', 'ids', 'attributes', 'offset', 'limit', 'sort' ]
 
-    constructor: ({ @defaultSort = "_id", @idField = "id", @multigetIdField = "_id", @filterableBooleans = [], @omitableProperties = Qs2Mongo.defaultOmitableProperties}) ->
+    constructor: ({ @defaultSort, @idField = "id", @multigetIdField = "_id", @filterableBooleans = [], @omitableProperties = Qs2Mongo.defaultOmitableProperties}) ->
 
     parse: (req, { strict } = {}) =>
       { query: {limit, offset,sort} } = req

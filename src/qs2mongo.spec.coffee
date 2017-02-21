@@ -14,7 +14,9 @@ describe "Qs2Mongo", ->
         attributes:"aField,anotherField"
         limit: "10"
         offset: "20"
-    qs2mongo = new Qs2Mongo filterableBooleans: ["aBooleanField"]
+    qs2mongo = new Qs2Mongo 
+      filterableBooleans: ["aBooleanField"]
+      defaultSort: "_id"
 
   it "should build everything in a query string", ->
     qs2mongo.parse req
@@ -52,7 +54,6 @@ describe "Qs2Mongo", ->
         should.not.exist options.sort
 
       it "should build options with default sort", ->
-        qs2mongo.defaultSort = "_id"
         qs2mongo.parse req
         .options.sort.should.eql
           _id: 1
