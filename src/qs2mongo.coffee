@@ -14,7 +14,7 @@ module.exports =
       { filters, projection, options }
     
     buildOptions: ({query: {limit, offset, sort}}) =>
-      { limit, offset, sort: @buildSort(sort) }
+      _.omitBy { limit, offset, sort: @buildSort(sort) }, _.isUndefined
 
     _getFilters_: (req, strict) =>
       filters = if strict then @buildFilters(req)

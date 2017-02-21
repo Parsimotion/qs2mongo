@@ -72,7 +72,15 @@ describe "Qs2Mongo", ->
         offset: "20"
         sort: 
           aField: -1
-  
+    
+    it "should build options without limit an options", ->
+      delete req.query.limit
+      delete req.query.offset
+      qs2mongo.parse req
+      .options.should.eql
+        sort: 
+          _id: 1
+
   describe "Filters", ->
 
     it "should build filters with like ignore case if not using strict", ->
