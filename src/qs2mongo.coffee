@@ -14,7 +14,12 @@ module.exports =
       { filters, projection, options }
     
     buildOptions: ({query: {limit, offset, sort}}) =>
-      _.omitBy { limit, offset, sort: @buildSort(sort) }, _.isUndefined
+      [ parsedLimit, parsedOffset ] = [limit,offset].map (it) => parseInt it
+      _.omitBy 
+        limit: if !isNaN parsedLimit then parsedLimit
+        offset: if !isNaN parsedOffset then parsedOffset
+        sort: @buildSort(sort)
+      , _.isUndefined
 
     _getFilters_: (req, strict) =>
       filters = if strict then @buildFilters(req)

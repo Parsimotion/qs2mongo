@@ -12,8 +12,8 @@ describe "Qs2Mongo", ->
         "fields,joinedByOr": "theOrValue"
         aBooleanField: "false"
         attributes:"aField,anotherField"
-        limit:"10"
-        offset:"20"
+        limit: "10"
+        offset: "20"
     qs2mongo = new Qs2Mongo filterableBooleans: ["aBooleanField"]
 
   it "should build everything in a query string", ->
@@ -31,8 +31,8 @@ describe "Qs2Mongo", ->
         aField:1
         anotherField:1
       options:
-        limit: "10"
-        offset: "20"
+        limit: 10
+        offset: 20
         sort: 
           _id: 1
 
@@ -48,8 +48,8 @@ describe "Qs2Mongo", ->
     it "should build options with default sort", ->
       qs2mongo.parse req
       .options.should.eql
-        limit: "10"
-        offset: "20"
+        limit: 10
+        offset: 20
         sort: 
           _id: 1
 
@@ -58,8 +58,8 @@ describe "Qs2Mongo", ->
       _.assign req.query, { sort }
       qs2mongo.parse req
       .options.should.eql
-        limit: "10"
-        offset: "20"
+        limit: 10
+        offset: 20
         sort: 
           aField: 1
 
@@ -68,12 +68,12 @@ describe "Qs2Mongo", ->
       _.assign req.query, { sort }
       qs2mongo.parse req
       .options.should.eql
-        limit: "10"
-        offset: "20"
+        limit: 10
+        offset: 20
         sort: 
           aField: -1
     
-    it "should build options without limit an options", ->
+    it "should build options without limit and offset options", ->
       delete req.query.limit
       delete req.query.offset
       qs2mongo.parse req
