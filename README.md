@@ -15,7 +15,7 @@ Builds filters, projections and options for mongoose queries
     - strict: `key=value` is `{ key: value }`
     - not strict: `key=value` is `{ key: /value/gi }`
     - or: `key,anotherKey=value` is `$or: [{key:value}, {anotherKey:anotherValue}]`
-    - unary operators: `key__gt=value` is `{key: $gt: "value"}`
+    - unary operators: `key__gt=value` is `{key: { $gt: "value"} }`
 
 #### Basic usage
 
