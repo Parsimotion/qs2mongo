@@ -6,6 +6,7 @@ module.exports =
     @operators: [ 'lt', 'gt','lte', 'gte','in','nin','eq' ]
 
     constructor: ({ 
+      @Schema,
       @defaultSort, 
       @idField = "id", 
       @multigetIdField = "_id", 
@@ -64,8 +65,7 @@ module.exports =
       propertiesToOmit = @omitableProperties
       idFilters = @buildIdFilters filters.ids
 
-      @castBooleanFilters filters
-      @castDateFilters filters
+      @_castFilters filters
 
       _(filters)
       .omit propertiesToOmit
@@ -80,25 +80,23 @@ module.exports =
       (value?.toLowerCase?() ? _default?.toString()) == 'true'
 
     buildSearch: ({query}) =>
+      filters = _.clone query
       filterableDates = @_mergeWithOperators @filterableDates
-      search = _.omit query, 
+      search = _.omit filters, 
         @filterableBooleans
         .concat @omitableProperties
         .concat filterableDates
-      booleans = _.pick query, @filterableBooleans
-      dates = _.pick query, filterableDates
-      @castBooleanFilters booleans
-      @castDateFilters dates
-      idFilters = @buildIdFilters query.ids
-      _.merge dates, booleans, idFilters, @_asLikeIgnoreCase search
+      @_castFilters filters
+      booleans = _.pick filters, @filterableBooleans
+      dates = _.pick filters, filterableDates
+      idFilters = @buildIdFilters filters.ids
+      _.merge booleans, dates, idFilters, @_asLikeIgnoreCase search
 
     _asLikeIgnoreCase: (search) ->
       _.reduce search, ((result, value, field) ->
         result[field] = new RegExp "#{value}", 'i'
         result
       ), {}
-
-    _omitableProperties: => ['by', 'ids', 'attributes', 'offset', 'limit', 'sort' ]
 
     buildSort: (field = @defaultSort) =>
       if field?
@@ -111,9 +109,9 @@ module.exports =
       filters = _.clone query
       propertiesToOmit = @omitableProperties
       idFilters = @buildIdFilters filters.ids
-      @castBooleanFilters filters
-      @castDateFilters filters
 
+      @_castFilters filters
+      
       _(filters)
       .omit propertiesToOmit
       .merge idFilters
@@ -124,7 +122,11 @@ module.exports =
 
     castDateFilters: (query) =>
       @_transformFilters query, @filterableDates, (it) -> new Date it.source or it
-    
+
+    _castFilters: (filters) => 
+      @castBooleanFilters filters
+      @castDateFilters filters
+
     _mergeWithOperators: (fields) =>
       _.flatMap fields, (field) =>
         Qs2Mongo.operators.map (it)=> "#{field}__#{it}"
