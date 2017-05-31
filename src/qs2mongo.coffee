@@ -1,5 +1,5 @@
 _ = require("lodash")
-Schema = require("./schema")
+TypeCaster = require("./typeCaster")
 
 module.exports =
   class Qs2Mongo
@@ -7,7 +7,7 @@ module.exports =
     @operators: [ 'lt', 'gt','lte', 'gte','in','nin','eq' ]
 
     constructor: ({ 
-      @Schema = Schema,
+      @Schema,
       @defaultSort, 
       @idField = "id", 
       @multigetIdField = "_id", 
@@ -16,7 +16,7 @@ module.exports =
       @omitableProperties = Qs2Mongo.defaultOmitableProperties
     }) ->
       #TODO: SACAR ESTO
-      _.assign Schema, { @filterableBooleans, @filterableDates, @omitableProperties }
+      @typeCaster = _.assign TypeCaster, { @filterableBooleans, @filterableDates, @omitableProperties }
 
     middleware: (req, res, next) ->
       mongo = @parse req
@@ -122,7 +122,7 @@ module.exports =
       .merge idFilters
       .value()
 
-    _castFilters: (filters) => @Schema.castFilters filters
+    _castFilters: (filters) => @typeCaster.castFilters filters
 
     buildIdFilters: (ids) =>
       if ids?
