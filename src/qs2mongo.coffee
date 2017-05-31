@@ -16,7 +16,7 @@ module.exports =
       @omitableProperties = Qs2Mongo.defaultOmitableProperties
     }) ->
       #TODO: SACAR ESTO
-      @typeCaster = _.assign TypeCaster, { @filterableBooleans, @filterableDates, @omitableProperties }
+      @typeCaster = new TypeCaster { @filterableBooleans, @filterableDates, @omitableProperties }
 
     middleware: (req, res, next) ->
       mongo = @parse req

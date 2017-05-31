@@ -1,8 +1,10 @@
 _ = require("lodash")
 
 module.exports = 
-  new class Schema
+  class TypeCaster
     @operators: [ 'lt', 'gt','lte', 'gte','in','nin','eq' ] #TODO: Sacar esto de aca
+
+    constructor: (opts) -> _.assign @, opts
     
     _castBooleanFilters: (query) =>
       @_transformFilters query, @filterableBooleans, @_stringToBoolean
@@ -12,7 +14,7 @@ module.exports =
 
     _mergeWithOperators: (fields) =>
       _.flatMap fields, (field) =>
-        Schema.operators.map (it)=> "#{field}__#{it}"
+        TypeCaster.operators.map (it) => "#{field}__#{it}"
           .concat field
       #This has effect
     _transformFilters: (query, fields, transformation) =>
