@@ -13,10 +13,11 @@ module.exports =
       @multigetIdField = "_id", 
       @filterableBooleans = [], 
       @filterableDates = [], 
+      @filterableNumbers = [], 
       @omitableProperties = Qs2Mongo.defaultOmitableProperties
     }) ->
       #TODO: SACAR ESTO
-      @typeCaster = new TypeCaster { @filterableBooleans, @filterableDates, @omitableProperties }
+      @typeCaster = new TypeCaster { @filterableBooleans, @filterableDates, @omitableProperties, @filterableNumbers }
 
     middleware: (req, res, next) ->
       mongo = @parse req

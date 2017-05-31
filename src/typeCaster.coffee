@@ -5,6 +5,9 @@ module.exports =
     @operators: [ 'lt', 'gt','lte', 'gte','in','nin','eq' ] #TODO: Sacar esto de aca
 
     constructor: (opts) -> _.assign @, opts
+
+    _castNumberFilters: (query) =>
+      @_transformFilters query, @filterableNumbers, (it) -> Number(it)
     
     _castBooleanFilters: (query) =>
       @_transformFilters query, @filterableBooleans, @_stringToBoolean
@@ -28,3 +31,4 @@ module.exports =
     castFilters: (filters) => 
       @_castBooleanFilters filters
       @_castDateFilters filters
+      @_castNumberFilters filters
