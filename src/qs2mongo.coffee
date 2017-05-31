@@ -1,4 +1,5 @@
 _ = require("lodash")
+Schema = require("./schema")
 
 module.exports =
   class Qs2Mongo
@@ -6,7 +7,7 @@ module.exports =
     @operators: [ 'lt', 'gt','lte', 'gte','in','nin','eq' ]
 
     constructor: ({ 
-      @Schema,
+      @Schema = Schema,
       @defaultSort, 
       @idField = "id", 
       @multigetIdField = "_id", 
@@ -14,6 +15,8 @@ module.exports =
       @filterableDates = [], 
       @omitableProperties = Qs2Mongo.defaultOmitableProperties
     }) ->
+      #TODO: SACAR ESTO
+      _.assign Schema, { @filterableBooleans, @filterableDates, @omitableProperties }
 
     middleware: (req, res, next) ->
       mongo = @parse req
@@ -76,9 +79,6 @@ module.exports =
       attributes = query.attributes?.split ','
       _.zipObject attributes, _.times(attributes?.length, -> 1)
 
-    stringToBoolean: (value,_default) ->
-      (value?.toLowerCase?() ? _default?.toString()) == 'true'
-
     buildSearch: ({query}) =>
       filters = _.clone query
       filterableDates = @_mergeWithOperators @filterableDates
@@ -91,6 +91,11 @@ module.exports =
       dates = _.pick filters, filterableDates
       idFilters = @buildIdFilters filters.ids
       _.merge booleans, dates, idFilters, @_asLikeIgnoreCase search
+
+    _mergeWithOperators: (fields) =>
+      _.flatMap fields, (field) =>
+        Qs2Mongo.operators.map (it)=> "#{field}__#{it}"
+          .concat field
 
     _asLikeIgnoreCase: (search) ->
       _.reduce search, ((result, value, field) ->
@@ -117,25 +122,7 @@ module.exports =
       .merge idFilters
       .value()
 
-    castBooleanFilters: (query) =>
-      @_transformFilters query, @filterableBooleans, @stringToBoolean
-
-    castDateFilters: (query) =>
-      @_transformFilters query, @filterableDates, (it) -> new Date it.source or it
-
-    _castFilters: (filters) => 
-      @castBooleanFilters filters
-      @castDateFilters filters
-
-    _mergeWithOperators: (fields) =>
-      _.flatMap fields, (field) =>
-        Qs2Mongo.operators.map (it)=> "#{field}__#{it}"
-          .concat field
-      #This has effect
-    _transformFilters: (query, fields, transformation) =>
-      filtersWithOperators = @_mergeWithOperators fields
-      filtersWithOperators.forEach (field) =>
-        query[field] = transformation query[field] if query[field]?
+    _castFilters: (filters) => @Schema.castFilters filters
 
     buildIdFilters: (ids) =>
       if ids?
