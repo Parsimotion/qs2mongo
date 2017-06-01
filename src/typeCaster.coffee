@@ -36,8 +36,6 @@ module.exports =
     _compose: ->
       fns = arguments
       (result) ->
-        i = fns.length - 1
-        while i > -1
-          result = fns[i].call(this, result)
-          i--
+        _.forEachRight fns, (fn) ->
+          result = fn.call(this, result)
         result
