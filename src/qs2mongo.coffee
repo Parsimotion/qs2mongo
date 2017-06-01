@@ -52,10 +52,14 @@ module.exports =
         operator = _.find Qs2Mongo.operators, (operator) => _.endsWith field, "__#{operator}"
         return {"#{field}":value} unless operator?
         name = field.replace "__#{operator}", ""
-        "#{name}": "$#{operator}": value.source or value
+        @_parseOperator name,operator, value
       rv = {}
       filtersWithOperators.forEach (it) => _.assign rv, it
       rv
+
+    _parseOperator: (name, operator, value) =>
+      "#{name}": "$#{operator}": value.source or value
+
 
     _makeOrFilters: (filters) =>
       _toCondition = _.curry (value, fieldNames) ->

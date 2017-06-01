@@ -207,4 +207,10 @@ describe "Qs2Mongo", ->
         qs2mongo.parse {query: aDateField__gt: aDate.toISOString()}
         .filters.should.eql
           aDateField: $gt: aDate
+    
+      it.skip "should build filters with in operator without strict", ->
+        qs2mongo.parse {query: aNumberField__in: "1,2,3"}
+        .filters.should.eql
+          aNumberField: $in: [1,2,3]
+      
       
