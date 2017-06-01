@@ -7,13 +7,13 @@ module.exports =
     constructor: (opts) -> _.assign @, opts
 
     _castNumberFilters: (query) =>
-      @_transformFilters query, @filterableNumbers, (it) -> Number(it)
+      @_transformFilters query, @numbers, (it) -> Number(it)
     
     _castBooleanFilters: (query) =>
-      @_transformFilters query, @filterableBooleans, @_stringToBoolean
+      @_transformFilters query, @booleans, @_stringToBoolean
 
     _castDateFilters: (query) =>
-      @_transformFilters query, @filterableDates, (it) -> new Date it.source or it
+      @_transformFilters query, @dates, (it) -> new Date it.source or it
 
     _mergeWithOperators: (fields) =>
       _.flatMap fields, (field) =>
