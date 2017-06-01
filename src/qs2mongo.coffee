@@ -3,6 +3,7 @@ TypeCaster = require("./typeCaster")
 
 module.exports =
   class Qs2Mongo
+    @Schemas: require("./schemas")
     @defaultOmitableProperties: ['by', 'ids', 'attributes', 'offset', 'limit', 'sort' ]
     @operators: [ 'lt', 'gt','lte', 'gte','in','nin','eq' ]
 
@@ -13,7 +14,6 @@ module.exports =
       @multigetIdField = "_id"
       @omitableProperties = Qs2Mongo.defaultOmitableProperties
     }) ->
-      #TODO: SACAR ESTO
       @typeCaster = new TypeCaster {
         booleans: @schema.booleans()
         dates: @schema.dates()
