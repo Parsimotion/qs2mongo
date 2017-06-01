@@ -60,7 +60,7 @@ module.exports =
     _parseOperator: (name, operator, operand) =>
       argument = operand.source or operand
       if operator in ["in","nin"]
-        argument = argument.split(',').map (it) => @_castFilters("#{name}": it)[name]
+        argument = argument.split(',').map (it) => @_castByName name, it
       
       "#{name}": "$#{operator}": argument
 
@@ -132,6 +132,8 @@ module.exports =
       .merge idFilters
       .value()
 
+    _castByName: (name, value) => @_castFilters("#{name}": value)[name]
+    
     _castFilters: (filters) => @typeCaster.castFilters filters
 
     buildIdFilters: (ids) =>
