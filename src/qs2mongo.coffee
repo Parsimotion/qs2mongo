@@ -57,8 +57,10 @@ module.exports =
       filtersWithOperators.forEach (it) => _.assign rv, it
       rv
 
-    _parseOperator: (name, operator, value) =>
-      "#{name}": "$#{operator}": value.source or value
+    _parseOperator: (name, operator, operand) =>
+      argument = operand.source or operand
+      argument = argument.split(',') if operator in ["in","nin"]
+      "#{name}": "$#{operator}": argument
 
 
     _makeOrFilters: (filters) =>

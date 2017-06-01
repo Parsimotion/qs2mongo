@@ -208,9 +208,9 @@ describe "Qs2Mongo", ->
         .filters.should.eql
           aDateField: $gt: aDate
     
-      it.skip "should build filters with in operator without strict", ->
-        qs2mongo.parse {query: aNumberField__in: "1,2,3"}
+      it "should build filters with in operator without strict", ->
+        qs2mongo.parse {query: aField__in: "a,b,c"}
         .filters.should.eql
-          aNumberField: $in: [1,2,3]
+          aField: $in: ["a","b","c"]
       
       
