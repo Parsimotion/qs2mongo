@@ -55,7 +55,14 @@ module.exports =
         @_parseOperator name, operator, value
       rv = {}
       filtersWithOperators.forEach (it) => _.assign rv, it
-      rv
+      @_castOrOperands rv
+    
+    _castOrOperands: (filters) => 
+      if filters["$or"]
+        filters["$or"] = filters["$or"].map (filter) => 
+          name = _.head(_.keys(filter))
+          "#{name}": @_castByName name, filter[name]
+      filters
 
     _parseOperator: (name, operator, operand) =>
       argument = operand.source or operand
@@ -65,7 +72,7 @@ module.exports =
       "#{name}": "$#{operator}": argument
 
     _makeOrFilters: (filters) =>
-      _toCondition = _.curry (value, fieldNames) ->
+      _toCondition = _.curry (value, fieldNames) =>
         fields = fieldNames.split(',')
         switch fields.length
           when 1 then "#{fields[0]}": value

@@ -231,7 +231,7 @@ describe "Qs2Mongo", ->
           .filters.should.eql
             aField: $in: ["1","2","3"]
         
-        it.skip "should cast each $or operand to its right type", ->
+        it "should cast each $or operand to its right type", ->
           qs2mongo.parse {query: "aField,aNumberField": "123"}
           .filters.should.eql
             $or: [{aField:/123/i}, {aNumberField:123}]
