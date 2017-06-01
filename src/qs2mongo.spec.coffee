@@ -1,6 +1,7 @@
 _ = require("lodash")
 should = require("should")
 Qs2Mongo = require("./qs2mongo")
+MySchema = require("./schema.example")
 { qs2mongo, req, multigetReq, aDate, dateReq, aNumber, numberReq } = {}
   
 describe "Qs2Mongo", ->
@@ -19,11 +20,17 @@ describe "Qs2Mongo", ->
     dateReq = query: aDateField: aDate.toISOString()
     aNumber = 42
     numberReq = query: aNumberField: aNumber.toString()
-    qs2mongo = new Qs2Mongo 
+
+    schema = new MySchema
       filterableBooleans: ["aBooleanField"]
       filterableDates: ["aDateField"]
       filterableNumbers: ["aNumberField"]
+    
+    qs2mongo = new Qs2Mongo {
+      schema
       defaultSort: "_id"
+    }
+    
 
   it "should build everything in a query string", ->
     qs2mongo.parse req

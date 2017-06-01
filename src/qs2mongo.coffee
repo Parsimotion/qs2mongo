@@ -7,20 +7,17 @@ module.exports =
     @operators: [ 'lt', 'gt','lte', 'gte','in','nin','eq' ]
 
     constructor: ({ 
-      @Schema,
-      @defaultSort, 
-      @idField = "id", 
-      @multigetIdField = "_id", 
-      @filterableBooleans = [], 
-      @filterableDates = [], 
-      @filterableNumbers = [], 
+      @schema
+      @defaultSort
+      @idField = "id"
+      @multigetIdField = "_id"
       @omitableProperties = Qs2Mongo.defaultOmitableProperties
     }) ->
       #TODO: SACAR ESTO
-      @typeCaster = new TypeCaster { 
-        booleans: @filterableBooleans
-        dates: @filterableDates
-        numbers: @filterableNumbers
+      @typeCaster = new TypeCaster {
+        booleans: @schema.booleans()
+        dates: @schema.dates()
+        numbers: @schema.numbers()
         @omitableProperties
       }
 
@@ -87,13 +84,13 @@ module.exports =
 
     buildSearch: ({query}) =>
       filters = _.clone query
-      filterableDates = @_mergeWithOperators @filterableDates
+      filterableDates = @_mergeWithOperators @schema.dates()
       search = _.omit filters, 
-        @filterableBooleans
+        @schema.booleans()
         .concat @omitableProperties
         .concat filterableDates
       @_castFilters filters
-      booleans = _.pick filters, @filterableBooleans
+      booleans = _.pick filters, @schema.booleans()
       dates = _.pick filters, filterableDates
       idFilters = @buildIdFilters filters.ids
       _.merge booleans, dates, idFilters, @_asLikeIgnoreCase search

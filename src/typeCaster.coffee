@@ -4,7 +4,8 @@ module.exports =
   class TypeCaster
     @operators: [ 'lt', 'gt','lte', 'gte','in','nin','eq' ] #TODO: Sacar esto de aca
 
-    constructor: (opts) -> _.assign @, opts
+    constructor: (opts) -> 
+      _.assign @, opts
 
     _castNumberFilters: (query) =>
       @_transformFilters query, @numbers, (it) -> Number(it)
