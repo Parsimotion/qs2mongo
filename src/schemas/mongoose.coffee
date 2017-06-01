@@ -14,3 +14,5 @@ module.exports =
     dates: => @_pathsByType 'Date'
     
     booleans: => @_pathsByType 'Boolean'
+    
+    objectIds: => @_pathsByType 'ObjectId'

@@ -1,4 +1,5 @@
 _ = require("lodash")
+{ ObjectId } = require("mongodb")
 
 module.exports = 
   class TypeCaster
@@ -9,6 +10,9 @@ module.exports =
       @castFilters = 
         @_compose @_castNumberFilters, @_castDateFilters, @_castBooleanFilters
 
+    _castObjectIdFilters: (query) =>
+      @_transformFilters query, @objectIds, (it) -> new ObjectId(it)
+    
     _castNumberFilters: (query) =>
       @_transformFilters query, @numbers, (it) -> Number(it)
     
@@ -30,7 +34,7 @@ module.exports =
       query
 
     _stringToBoolean: (value,_default) ->
-      (value?.toLowerCase?() ? _default?.toString()) == 'true'
+      (value?.toLowerCase?() or _default?.toString()) is 'true'
 
     _compose: ->
       fns = arguments
