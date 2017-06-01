@@ -63,3 +63,21 @@ qs2mongo = new Qs2Mongo
   filterableBooleans: ["aBooleanField","anotherBooleanField"]
   filterableDates: ["aDateField","anotherDateField"]
 ```
+
+## Advanced
+
+If you'd like to use a custom mongodb driver, you must provide your own type conversion implementation as follows:
+
+``` Coffesscript
+{
+  toObjectId: (it) -> #your conversion
+
+  toNumber: (it) -> #your conversion
+
+  toBoolean: (it) -> #your conversion
+
+  toDate: (it) -> #your conversion
+}
+```
+
+Specify the path to your implementation in process.env.QS_TRANSFORMER_DRIVER
