@@ -9,7 +9,7 @@ module.exports =
       _.assign @, opts
       #flowRight === compose
       @castFilters = 
-        _.flowRight @_castNumberFilters, @_castDateFilters, @_castBooleanFilters
+        _.flowRight @_castNumberFilters, @_castDateFilters, @_castBooleanFilters, @_castObjectIdFilters
 
     _castObjectIdFilters: (query) =>
       @_transformFilters query, @objectIds, (it) -> new ObjectId(it)
