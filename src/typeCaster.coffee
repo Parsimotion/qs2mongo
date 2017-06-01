@@ -37,5 +37,5 @@ module.exports =
       fns = arguments
       (result) ->
         _.forEachRight fns, (fn) ->
-          result = fn.call(this, result)
+          result = fn result
         result
