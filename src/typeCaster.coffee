@@ -6,6 +6,8 @@ module.exports =
 
     constructor: (opts) -> 
       _.assign @, opts
+      @castFilters = 
+        @_compose @_castNumberFilters, @_castDateFilters, @_castBooleanFilters
 
     _castNumberFilters: (query) =>
       @_transformFilters query, @numbers, (it) -> Number(it)
@@ -29,9 +31,6 @@ module.exports =
 
     _stringToBoolean: (value,_default) ->
       (value?.toLowerCase?() ? _default?.toString()) == 'true'
-
-    castFilters: (filters) => 
-      @_compose(@_castNumberFilters, @_castDateFilters, @_castBooleanFilters) filters
 
     _compose: ->
       fns = arguments
