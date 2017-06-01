@@ -207,14 +207,23 @@ describe "Qs2Mongo", ->
         qs2mongo.parse {query: aDateField__gt: aDate.toISOString()}
         .filters.should.eql
           aDateField: $gt: aDate
+      
       describe "$in Operator", ->
+
         it "should build filters without strict", ->
           qs2mongo.parse {query: aField__in: "a,b,c"}
           .filters.should.eql
             aField: $in: ["a","b","c"]
+
         it "should build filters with strict", ->
           qs2mongo.parse {query: aField__in: "a,b,c"}, strict:true
           .filters.should.eql
             aField: $in: ["a","b","c"]
+      
+        it.skip "should cast operands to right type according to field", ->
+          qs2mongo.parse {query: aNumberField__in: "1,2,3"}
+          .filters.should.eql
+            aNumberField: $in: [1,2,3]
+      
       
       
