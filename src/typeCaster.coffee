@@ -7,8 +7,9 @@ module.exports =
 
     constructor: (opts) -> 
       _.assign @, opts
+      #flowRight === compose
       @castFilters = 
-        @_compose @_castNumberFilters, @_castDateFilters, @_castBooleanFilters
+        _.flowRight @_castNumberFilters, @_castDateFilters, @_castBooleanFilters
 
     _castObjectIdFilters: (query) =>
       @_transformFilters query, @objectIds, (it) -> new ObjectId(it)
@@ -35,10 +36,3 @@ module.exports =
 
     _stringToBoolean: (value,_default) ->
       (value?.toLowerCase?() or _default?.toString()) is 'true'
-
-    _compose: ->
-      fns = arguments
-      (result) ->
-        _.forEachRight fns, (fn) ->
-          result = fn result
-        result
