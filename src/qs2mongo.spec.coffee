@@ -256,3 +256,8 @@ describe "Qs2Mongo", ->
           .filters.should.eql
             $or: [{aField:"asdf"}]
         
+        it "should omit filter if date operand has value outside its domain in $or operand ", ->
+          qs2mongo.parse {query: "aField,aDateField": "asdf"}, strict: true
+          .filters.should.eql
+            $or: [{aField:"asdf"}]
+        

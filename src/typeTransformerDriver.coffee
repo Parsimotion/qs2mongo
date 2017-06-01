@@ -10,7 +10,7 @@ _toNumber = (it) -> Number _value it
 module.exports =
   new class TypeTransformerDriver
 
-    toObjectId: (it) -> new ObjectId _value it
+    toObjectId: (it) -> try new ObjectId _value it
     
     toNumber: (it) -> 
       #hackeada para que funcione el $in con strict: true
@@ -21,7 +21,9 @@ module.exports =
         _.reject values, _.isNaN
 
 
-    toBoolean: (it) -> _stringToBoolean _value it
+    toBoolean: (it) -> _stringToBoolean _value(it), false
 
-    toDate: (it) -> new Date _value it
+    toDate: (it) -> 
+      value = new Date _value it
+      value unless _.isNaN value.getTime()
 
