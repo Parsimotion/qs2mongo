@@ -25,11 +25,19 @@ module.exports =
       filtersWithOperators = @_mergeWithOperators fields
       filtersWithOperators.forEach (field) =>
         query[field] = transformation query[field] if query[field]?
+      query
 
     _stringToBoolean: (value,_default) ->
       (value?.toLowerCase?() ? _default?.toString()) == 'true'
 
     castFilters: (filters) => 
-      @_castBooleanFilters filters
-      @_castDateFilters filters
-      @_castNumberFilters filters
+      @_compose(@_castNumberFilters, @_castDateFilters, @_castBooleanFilters) filters
+
+    _compose: ->
+      fns = arguments
+      (result) ->
+        i = fns.length - 1
+        while i > -1
+          result = fns[i].call(this, result)
+          i--
+        result
