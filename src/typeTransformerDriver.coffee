@@ -15,7 +15,10 @@ module.exports =
     toNumber: (it) -> 
       #hackeada para que funcione el $in con strict: true
       values = "#{_value it}".split(',').map _toNumber
-      if values.length is 1 then values[0] else _.reject values, _.isNaN
+      if values.length is 1
+        values[0] if _.isFinite values[0]
+      else 
+        _.reject values, _.isNaN
 
 
     toBoolean: (it) -> _stringToBoolean _value it

@@ -59,9 +59,11 @@ module.exports =
     
     _castOrOperands: (filters) => 
       if filters["$or"]
-        filters["$or"] = filters["$or"].map (filter) => 
+        filters["$or"] = _.compact filters["$or"].map (filter) => 
           name = _.head(_.keys(filter))
-          "#{name}": @_castByName name, filter[name]
+          value = @_castByName name, filter[name]
+          "#{name}": value unless _.isUndefined value
+
       filters
 
     _parseOperator: (name, operator, operand) =>
