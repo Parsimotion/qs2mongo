@@ -1,5 +1,5 @@
 _ = require("lodash")
-{ ObjectId } = require("mongodb")
+TypeTransformerDriver = require(process.env.QS_TRANSFORMER_DRIVER or "./typeTransformerDriver")
 
 module.exports = 
   class TypeCaster
@@ -12,16 +12,16 @@ module.exports =
         _.flowRight @_castNumberFilters, @_castDateFilters, @_castBooleanFilters, @_castObjectIdFilters
 
     _castObjectIdFilters: (query) =>
-      @_transformFilters query, @objectIds, (it) -> new ObjectId(it)
+      @_transformFilters query, @objectIds, TypeTransformerDriver.toObjectId
     
     _castNumberFilters: (query) =>
-      @_transformFilters query, @numbers, (it) -> Number(it)
+      @_transformFilters query, @numbers, TypeTransformerDriver.toNumber
     
     _castBooleanFilters: (query) =>
-      @_transformFilters query, @booleans, @_stringToBoolean
+      @_transformFilters query, @booleans, TypeTransformerDriver.toBoolean
 
     _castDateFilters: (query) =>
-      @_transformFilters query, @dates, (it) -> new Date it.source or it
+      @_transformFilters query, @dates, TypeTransformerDriver.toDate
 
     _mergeWithOperators: (fields) =>
       _.flatMap fields, (field) =>
