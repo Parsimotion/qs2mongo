@@ -23,6 +23,7 @@
     "grunt-contrib-clean": "1.0.0",
     "grunt-contrib-coffee": "1.0.0",
     "grunt-mocha-test": "0.13.2",
+    "mongoose": "^4.10.4",
     "should": "11.1.0"
   },
   "author": "Parsimotion",
