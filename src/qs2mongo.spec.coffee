@@ -220,10 +220,15 @@ describe "Qs2Mongo", ->
           .filters.should.eql
             aField: $in: ["a","b","c"]
       
-        it.skip "should cast operands to right type according to field", ->
+        it "should cast operands to number when field es numeric", ->
           qs2mongo.parse {query: aNumberField__in: "1,2,3"}
           .filters.should.eql
             aNumberField: $in: [1,2,3]
+      
+        it "should not cast operands to number when field is not numeric", ->
+          qs2mongo.parse {query: aField__in: "1,2,3"}
+          .filters.should.eql
+            aField: $in: ["1","2","3"]
       
       
       
