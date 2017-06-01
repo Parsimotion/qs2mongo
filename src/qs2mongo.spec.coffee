@@ -218,17 +218,20 @@ describe "Qs2Mongo", ->
         it "should build filters with strict", ->
           qs2mongo.parse {query: aField__in: "a,b,c"}, strict:true
           .filters.should.eql
-            aField: $in: ["a","b","c"]
-      
-        it "should cast operands to number when field es numeric", ->
+          aField: $in: ["a","b","c"]
+    
+      describe "type casting", ->  
+        it "should cast $in operands to number when field es numeric", ->
           qs2mongo.parse {query: aNumberField__in: "1,2,3"}
           .filters.should.eql
             aNumberField: $in: [1,2,3]
       
-        it "should not cast operands to number when field is not numeric", ->
+        it "should not cast $in operands to number when field is not numeric", ->
           qs2mongo.parse {query: aField__in: "1,2,3"}
           .filters.should.eql
             aField: $in: ["1","2","3"]
-      
-      
-      
+        
+        it.skip "should cast each $or operand to its right type", ->
+          qs2mongo.parse {query: "aField,aNumberField": "123"}
+          .filters.should.eql
+            $or: [{aField:/123/i}, {aNumberField:123}]
