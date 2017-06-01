@@ -221,17 +221,33 @@ describe "Qs2Mongo", ->
           aField: $in: ["a","b","c"]
     
       describe "type casting", ->  
-        it "should cast $in operands to number when field es numeric", ->
+        it "should cast $in operands to number when field es numeric without strict", ->
           qs2mongo.parse {query: aNumberField__in: "1,2,3"}
           .filters.should.eql
             aNumberField: $in: [1,2,3]
       
-        it "should not cast $in operands to number when field is not numeric", ->
+        it "should not cast $in operands to number when field is not numeric without strict", ->
           qs2mongo.parse {query: aField__in: "1,2,3"}
           .filters.should.eql
             aField: $in: ["1","2","3"]
         
-        it "should cast each $or operand to its right type", ->
+        it "should cast $in operands to number when field is numeric", ->
+          qs2mongo.parse {query: aNumberField__in: "1,2,3"}, strict: true
+          .filters.should.eql
+            aNumberField: $in: [1,2,3]
+      
+        it "should not cast $in operands to number when field is not numeric", ->
+          qs2mongo.parse {query: aField__in: "1,2,3"}, strict: true
+          .filters.should.eql
+            aField: $in: ["1","2","3"]
+
+        it "should cast each $or operand to its right type without strict", ->
           qs2mongo.parse {query: "aField,aNumberField": "123"}
           .filters.should.eql
             $or: [{aField:/123/i}, {aNumberField:123}]
+        
+        it "should cast each $or operand to its right type", ->
+          qs2mongo.parse {query: "aField,aNumberField": "123"}, strict: true
+          .filters.should.eql
+            $or: [{aField:"123"}, {aNumberField:123}]
+        

@@ -66,7 +66,7 @@ module.exports =
 
     _parseOperator: (name, operator, operand) =>
       argument = operand.source or operand
-      if operator in ["in","nin"]
+      if operator in ["in","nin"] and _.isString argument
         argument = argument.split(',').map (it) => @_castByName name, it
       
       "#{name}": "$#{operator}": argument
@@ -84,7 +84,6 @@ module.exports =
       filters = _.clone query
       propertiesToOmit = @omitableProperties
       idFilters = @buildIdFilters filters.ids
-
       @_castFilters filters
 
       _(filters)
@@ -126,18 +125,6 @@ module.exports =
         if descending
           field = field.substr 1
         { "#{field}": if descending then -1 else 1 }
-
-    buildFilters: ({query}) =>
-      filters = _.clone query
-      propertiesToOmit = @omitableProperties
-      idFilters = @buildIdFilters filters.ids
-
-      @_castFilters filters
-      
-      _(filters)
-      .omit propertiesToOmit
-      .merge idFilters
-      .value()
 
     _castByName: (name, value) => @_castFilters("#{name}": value)[name]
     
