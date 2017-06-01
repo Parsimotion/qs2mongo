@@ -4,6 +4,7 @@ module.exports =
       @filterableBooleans = []
       @filterableDates = []
       @filterableNumbers = []
+      @filterableObjectIds = []
     }) ->
       
     numbers: => @filterableNumbers
@@ -11,3 +12,5 @@ module.exports =
     dates: => @filterableDates
     
     booleans: => @filterableBooleans
+
+    objectIds: => @filterableObjectIds
