@@ -1,5 +1,5 @@
 module.exports = 
-  class MySchema 
+  class Manual
     constructor: ({
       @filterableBooleans = []
       @filterableDates = []

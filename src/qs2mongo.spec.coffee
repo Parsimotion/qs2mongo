@@ -1,7 +1,7 @@
 _ = require("lodash")
 should = require("should")
 Qs2Mongo = require("./qs2mongo")
-MySchema = require("./schema.example")
+Manual = require("./schemas/manual")
 { qs2mongo, req, multigetReq, aDate, dateReq, aNumber, numberReq } = {}
   
 describe "Qs2Mongo", ->
@@ -21,7 +21,7 @@ describe "Qs2Mongo", ->
     aNumber = 42
     numberReq = query: aNumberField: aNumber.toString()
 
-    schema = new MySchema
+    schema = new Manual
       filterableBooleans: ["aBooleanField"]
       filterableDates: ["aDateField"]
       filterableNumbers: ["aNumberField"]
