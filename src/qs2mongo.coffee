@@ -100,17 +100,11 @@ module.exports =
 
     buildSearch: ({query}) =>
       filters = _.clone query
-      filterableDates = @_mergeWithOperators @schema.dates()
-      filterableNumbers = @_mergeWithOperators @schema.numbers()
-      filterableObjectIds = @_mergeWithOperators @schema.objectIds()
-      filterableBooleans = @_mergeWithOperators @schema.booleans()
       
       casteableFields = _.flatMap ["dates","numbers","objectIds","booleans"], (getter) =>
         @_mergeWithOperators @schema[getter]()  
       
-      search = _.omit filters, 
-        casteableFields
-        .concat @omitableProperties
+      search = _.omit filters, casteableFields, @omitableProperties
 
       @_castFilters filters
 
