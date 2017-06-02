@@ -1,9 +1,17 @@
 _ = require("lodash")
 TypeCaster = require("./typeCaster")
-
+schemas = require("./schemas")
 module.exports =
   class Qs2Mongo
-    @Schemas: require("./schemas")
+
+    @Schemas: schemas
+    
+    @MongooseSchema: (schema, options = {}) ->
+      new @ _.merge { schema: new schemas.Mongoose schema }, options
+
+    @ManualSchema: (fields = {}, options = {}) ->
+      new @ _.merge { schema: new schemas.Manual fields }, options
+
     @defaultOmitableProperties: ['by', 'ids', 'attributes', 'offset', 'limit', 'sort' ]
     @operators: [ 'lt', 'gt','lte', 'gte','in','nin','eq' ]
 
