@@ -232,7 +232,14 @@ describe "Qs2Mongo", ->
           qs2mongo.parse {query: aField__in: "a,b,c"}, strict:true
           .filters.should.eql
           aField: $in: ["a","b","c"]
-    
+        
+        it "should correctly build single item number filter with strict", ->
+          qs2mongo.parse {query: aNumberField__in: "1"}, strict:true
+          .filters.should.eql aNumberField: $in: [1]
+        
+        it "should correctly build single item number filter without strict", ->
+          qs2mongo.parse {query: aNumberField__in: "1"}
+          .filters.should.eql aNumberField: $in: [1]
       describe "type casting", ->  
         it "should cast $in operands to number when field es numeric without strict", ->
           qs2mongo.parse {query: aNumberField__in: "1,2,3"}

@@ -77,9 +77,12 @@ module.exports =
 
     _parseOperator: (name, operator, operand) =>
       argument = operand.source or operand
-      if operator in ["in","nin"] and _.isString argument
-        argument = argument.split(',').map (it) => @_castByName name, it
-      
+      if operator in ["in","nin"] 
+        if _.isString argument
+          argument = argument.split(',').map (it) => @_castByName name, it
+        else 
+          argument = _.castArray argument
+
       "#{name}": "$#{operator}": argument
 
     _makeOrFilters: (filters) =>
