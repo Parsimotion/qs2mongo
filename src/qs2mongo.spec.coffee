@@ -1,7 +1,9 @@
 _ = require("lodash")
 should = require("should")
 Qs2Mongo = require("./qs2mongo")
-{ qs2mongo, req, multigetReq, aDate, dateReq } = {}
+{ ObjectId } = require("mongodb")
+Manual = require("./schemas/manual")
+{ qs2mongo, req, multigetReq, aDate, dateReq, aNumber, numberReq, anObjectId, objectIdReq } = {}
   
 describe "Qs2Mongo", ->
   beforeEach ->
@@ -17,10 +19,22 @@ describe "Qs2Mongo", ->
     multigetReq = query: ids: ["unId","otroId"].join()
     aDate = new Date("1999/01/02")
     dateReq = query: aDateField: aDate.toISOString()
-    qs2mongo = new Qs2Mongo 
+    aNumber = 42
+    numberReq = query: aNumberField: aNumber.toString()
+    anObjectId = "5919e3f5b89e9defa593734d"
+    objectIdReq = query: anObjectIdField: anObjectId
+
+    schema = new Manual
       filterableBooleans: ["aBooleanField"]
       filterableDates: ["aDateField"]
+      filterableNumbers: ["aNumberField"]
+      filterableObjectIds: ["anObjectIdField"]
+    
+    qs2mongo = new Qs2Mongo {
+      schema
       defaultSort: "_id"
+    }
+    
 
   it "should build everything in a query string", ->
     qs2mongo.parse req
@@ -146,6 +160,21 @@ describe "Qs2Mongo", ->
       .filters.should.eql
         aDateField: aDate
 
+    it "should get number filters as numbers", ->
+      qs2mongo.parse numberReq, strict: true
+      .filters.should.eql
+        aNumberField: aNumber
+
+    it "should get objectid filters as objectids", ->
+      qs2mongo.parse objectIdReq, strict: true
+      .filters.should.eql
+        anObjectIdField: new ObjectId anObjectId
+
+    it "should get objectid filters as objectids without strict", ->
+      qs2mongo.parse objectIdReq
+      .filters.should.eql
+        anObjectIdField: new ObjectId anObjectId
+
     describe "Multiget", ->
         
       it "should build multiget filters using strict", ->
@@ -192,3 +221,65 @@ describe "Qs2Mongo", ->
         .filters.should.eql
           aDateField: $gt: aDate
       
+      describe "$in Operator", ->
+
+        it "should build filters without strict", ->
+          qs2mongo.parse {query: aField__in: "a,b,c"}
+          .filters.should.eql
+            aField: $in: ["a","b","c"]
+
+        it "should build filters with strict", ->
+          qs2mongo.parse {query: aField__in: "a,b,c"}, strict:true
+          .filters.should.eql
+          aField: $in: ["a","b","c"]
+    
+      describe "type casting", ->  
+        it "should cast $in operands to number when field es numeric without strict", ->
+          qs2mongo.parse {query: aNumberField__in: "1,2,3"}
+          .filters.should.eql
+            aNumberField: $in: [1,2,3]
+      
+        it "should not cast $in operands to number when field is not numeric without strict", ->
+          qs2mongo.parse {query: aField__in: "1,2,3"}
+          .filters.should.eql
+            aField: $in: ["1","2","3"]
+        
+        it "should cast $in operands to number when field is numeric", ->
+          qs2mongo.parse {query: aNumberField__in: "1,2,3"}, strict: true
+          .filters.should.eql
+            aNumberField: $in: [1,2,3]
+      
+        it "should not cast $in operands to number when field is not numeric", ->
+          qs2mongo.parse {query: aField__in: "1,2,3"}, strict: true
+          .filters.should.eql
+            aField: $in: ["1","2","3"]
+
+        it "should cast each $or operand to its right type without strict", ->
+          qs2mongo.parse {query: "aField,aNumberField": "123"}
+          .filters.should.eql
+            $or: [{aField:/123/i}, {aNumberField:123}]
+        
+        it "should cast each $or operand to its right type", ->
+          qs2mongo.parse {query: "aField,aNumberField": "123"}, strict: true
+          .filters.should.eql
+            $or: [{aField:"123"}, {aNumberField:123}]
+        
+        it "should omit filter if operand has value outside its domain in $or operand ", ->
+          qs2mongo.parse {query: "aField,aNumberField": "asdf"}, strict: true
+          .filters.should.eql
+            $or: [{aField:"asdf"}]
+        
+        it "should omit filter if date operand has value outside its domain in $or operand ", ->
+          qs2mongo.parse {query: "aField,aDateField,anObjectIdField": "asdf"}, strict: true
+          .filters.should.eql
+            $or: [{aField:"asdf"}]
+
+        it "should omit filter if date operand has value outside its domain in $or operand ", ->
+          qs2mongo.parse {query: "aField,aDateField,anObjectIdField": anObjectId}, strict: true
+          .filters.should.eql
+            $or: [{aField:anObjectId}, {anObjectIdField: new ObjectId anObjectId}]
+        
+        it "should omit filter if operand has value outside its domain in $or operand without strict", ->
+          qs2mongo.parse {query: "aField,aNumberField": "asdf"}
+          .filters.should.eql
+            $or: [{aField:/asdf/i}]

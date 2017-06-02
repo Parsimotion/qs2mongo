@@ -1,18 +1,34 @@
 _ = require("lodash")
-
+TypeCaster = require("./typeCaster")
+schemas = require("./schemas")
 module.exports =
   class Qs2Mongo
+
+    @Schemas: schemas
+    
+    @MongooseSchema: (schema, options = {}) ->
+      new @ _.merge { schema: new schemas.Mongoose schema }, options
+
+    @ManualSchema: (fields = {}, options = {}) ->
+      new @ _.merge { schema: new schemas.Manual fields }, options
+
     @defaultOmitableProperties: ['by', 'ids', 'attributes', 'offset', 'limit', 'sort' ]
     @operators: [ 'lt', 'gt','lte', 'gte','in','nin','eq' ]
 
     constructor: ({ 
-      @defaultSort, 
-      @idField = "id", 
-      @multigetIdField = "_id", 
-      @filterableBooleans = [], 
-      @filterableDates = [], 
+      @schema
+      @defaultSort
+      @idField = "id"
+      @multigetIdField = "_id"
       @omitableProperties = Qs2Mongo.defaultOmitableProperties
     }) ->
+      @typeCaster = new TypeCaster {
+        booleans: @schema.booleans()
+        dates: @schema.dates()
+        numbers: @schema.numbers()
+        objectIds: @schema.objectIds()
+        @omitableProperties
+      }
 
     middleware: (req, res, next) ->
       mongo = @parse req
@@ -45,13 +61,29 @@ module.exports =
         operator = _.find Qs2Mongo.operators, (operator) => _.endsWith field, "__#{operator}"
         return {"#{field}":value} unless operator?
         name = field.replace "__#{operator}", ""
-        "#{name}": "$#{operator}": value.source or value
+        @_parseOperator name, operator, value
       rv = {}
       filtersWithOperators.forEach (it) => _.assign rv, it
-      rv
+      @_castOrOperands rv
+    
+    _castOrOperands: (filters) => 
+      if filters["$or"]
+        filters["$or"] = _.compact filters["$or"].map (filter) => 
+          name = _.head(_.keys(filter))
+          value = @_castByName name, filter[name]
+          "#{name}": value unless _.isUndefined value
+
+      filters
+
+    _parseOperator: (name, operator, operand) =>
+      argument = operand.source or operand
+      if operator in ["in","nin"] and _.isString argument
+        argument = argument.split(',').map (it) => @_castByName name, it
+      
+      "#{name}": "$#{operator}": argument
 
     _makeOrFilters: (filters) =>
-      _toCondition = _.curry (value, fieldNames) ->
+      _toCondition = _.curry (value, fieldNames) =>
         fields = fieldNames.split(',')
         switch fields.length
           when 1 then "#{fields[0]}": value
@@ -63,9 +95,7 @@ module.exports =
       filters = _.clone query
       propertiesToOmit = @omitableProperties
       idFilters = @buildIdFilters filters.ids
-
-      @castBooleanFilters filters
-      @castDateFilters filters
+      @_castFilters filters
 
       _(filters)
       .omit propertiesToOmit
@@ -76,29 +106,31 @@ module.exports =
       attributes = query.attributes?.split ','
       _.zipObject attributes, _.times(attributes?.length, -> 1)
 
-    stringToBoolean: (value,_default) ->
-      (value?.toLowerCase?() ? _default?.toString()) == 'true'
-
     buildSearch: ({query}) =>
-      filterableDates = @_mergeWithOperators @filterableDates
-      search = _.omit query, 
-        @filterableBooleans
-        .concat @omitableProperties
-        .concat filterableDates
-      booleans = _.pick query, @filterableBooleans
-      dates = _.pick query, filterableDates
-      @castBooleanFilters booleans
-      @castDateFilters dates
-      idFilters = @buildIdFilters query.ids
-      _.merge dates, booleans, idFilters, @_asLikeIgnoreCase search
+      filters = _.clone query
+      
+      casteableFields = _.flatMap ["dates","numbers","objectIds","booleans"], (getter) =>
+        @_mergeWithOperators @schema[getter]()  
+      
+      search = _.omit filters, casteableFields, @omitableProperties
+
+      @_castFilters filters
+
+      castedFilters = _.pick filters, casteableFields
+      idFilters = @buildIdFilters filters.ids
+      
+      _.merge castedFilters, idFilters, @_asLikeIgnoreCase search
+
+    _mergeWithOperators: (fields) =>
+      _.flatMap fields, (field) =>
+        Qs2Mongo.operators.map (it)=> "#{field}__#{it}"
+          .concat field
 
     _asLikeIgnoreCase: (search) ->
       _.reduce search, ((result, value, field) ->
         result[field] = new RegExp "#{value}", 'i'
         result
       ), {}
-
-    _omitableProperties: => ['by', 'ids', 'attributes', 'offset', 'limit', 'sort' ]
 
     buildSort: (field = @defaultSort) =>
       if field?
@@ -107,33 +139,9 @@ module.exports =
           field = field.substr 1
         { "#{field}": if descending then -1 else 1 }
 
-    buildFilters: ({query}) =>
-      filters = _.clone query
-      propertiesToOmit = @omitableProperties
-      idFilters = @buildIdFilters filters.ids
-      @castBooleanFilters filters
-      @castDateFilters filters
-
-      _(filters)
-      .omit propertiesToOmit
-      .merge idFilters
-      .value()
-
-    castBooleanFilters: (query) =>
-      @_transformFilters query, @filterableBooleans, @stringToBoolean
-
-    castDateFilters: (query) =>
-      @_transformFilters query, @filterableDates, (it) -> new Date it.source or it
+    _castByName: (name, value) => @_castFilters("#{name}": value)[name]
     
-    _mergeWithOperators: (fields) =>
-      _.flatMap fields, (field) =>
-        Qs2Mongo.operators.map (it)=> "#{field}__#{it}"
-          .concat field
-      #This has effect
-    _transformFilters: (query, fields, transformation) =>
-      filtersWithOperators = @_mergeWithOperators fields
-      filtersWithOperators.forEach (field) =>
-        query[field] = transformation query[field] if query[field]?
+    _castFilters: (filters) => @typeCaster.castFilters filters
 
     buildIdFilters: (ids) =>
       if ids?

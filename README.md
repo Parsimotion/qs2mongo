@@ -14,14 +14,29 @@ Builds filters, projections and options for mongoose queries
   - Any other key maps to a mongo filter. Available options are:
     - strict: `key=value` is `{ key: value }`
     - not strict: `key=value` is `{ key: /value/gi }`
-    - or: `key,anotherKey=value` is `$or: [{key:value}, {anotherKey:anotherValue}]`
+    - $or: `key,anotherKey=value` is `$or: [{key:value}, {anotherKey:value}]`
+    - $in : `key__in=a,b,c` is `key: $in: ["a","b","c"]`
     - unary operators: `key__gt=value` is `{key: { $gt: "value"} }`
 
 #### Basic usage
 
 ``` Coffeescript
 Qs2Mongo = require ("qs2mongo")
-qs2mongo = new Qs2Mongo()
+
+#Bind types to mongoose schema
+qs2mongo = Qs2Mongo.MongooseSchema YourMongooseSchema, {...otherOptions...}
+
+#Or manually specify types
+qs2mongo = Qs2Mongo.ManualSchema {
+  filterableBooleans, 
+  filterableNumbers,
+  filterableDates,
+  filterableObjectIds
+}, {...otherOptions...}
+```
+
+``` Coffeescript
+
 #... 
 anEndpoint: (req, res): =>
   { filters, projection, options } = qs2mongo.parse req
@@ -49,17 +64,26 @@ anEndpoint: (req, res): =>
     defaultSort, 
     idField = "id", 
     multigetIdField = "_id", 
-    filterableBooleans = [], 
-    filterableDates = [], 
     omitableProperties = Qs2Mongo.defaultOmitableProperties
   }
 ```
 
 
-#### Specify types of querystring keys
+## Advanced
 
-``` Coffeescript
-qs2mongo = new Qs2Mongo
-  filterableBooleans: ["aBooleanField","anotherBooleanField"]
-  filterableDates: ["aDateField","anotherDateField"]
+Default driver is mongodb. If you'd like to use a custom mongodb driver, you must provide your own type conversion implementation as follows:
+
+``` Coffesscript
+{
+  toObjectId: (it) -> #your conversion
+
+  toNumber: (it) -> #your conversion
+
+  toBoolean: (it) -> #your conversion
+
+  toDate: (it) -> #your conversion
+}
 ```
+Note: Your conversion must return the properly converted value if `it` is valid or `undefined` otherwise.
+
+Specify the path to your implementation in process.env.QS_TRANSFORMER_DRIVER
