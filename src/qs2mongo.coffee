@@ -104,12 +104,14 @@ module.exports =
       filterableNumbers = @_mergeWithOperators @schema.numbers()
       filterableObjectIds = @_mergeWithOperators @schema.objectIds()
       filterableBooleans = @_mergeWithOperators @schema.booleans()
+      
+      casteableFields = _.flatMap ["dates","numbers","objectIds","booleans"], (getter) =>
+        @_mergeWithOperators @schema[getter]()  
+      
       search = _.omit filters, 
-        filterableBooleans
-        .concat filterableDates
-        .concat filterableNumbers
-        .concat filterableObjectIds
+        casteableFields
         .concat @omitableProperties
+
       @_castFilters filters
 
       booleans = _.pick filters, filterableBooleans
