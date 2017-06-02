@@ -270,9 +270,14 @@ describe "Qs2Mongo", ->
             $or: [{aField:"asdf"}]
         
         it "should omit filter if date operand has value outside its domain in $or operand ", ->
-          qs2mongo.parse {query: "aField,aDateField": "asdf"}, strict: true
+          qs2mongo.parse {query: "aField,aDateField,anObjectIdField": "asdf"}, strict: true
           .filters.should.eql
             $or: [{aField:"asdf"}]
+
+        it "should omit filter if date operand has value outside its domain in $or operand ", ->
+          qs2mongo.parse {query: "aField,aDateField,anObjectIdField": anObjectId}, strict: true
+          .filters.should.eql
+            $or: [{aField:anObjectId}, {anObjectIdField: new ObjectId anObjectId}]
         
         it "should omit filter if operand has value outside its domain in $or operand without strict", ->
           qs2mongo.parse {query: "aField,aNumberField": "asdf"}
