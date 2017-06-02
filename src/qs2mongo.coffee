@@ -114,13 +114,10 @@ module.exports =
 
       @_castFilters filters
 
-      booleans = _.pick filters, filterableBooleans
-      dates = _.pick filters, filterableDates
-      numbers = _.pick filters, filterableNumbers
-      objectIds = _.pick filters, filterableObjectIds
+      castedFilters = _.pick filters, casteableFields
       idFilters = @buildIdFilters filters.ids
       
-      _.merge numbers, objectIds, booleans, dates, idFilters, @_asLikeIgnoreCase search
+      _.merge castedFilters, idFilters, @_asLikeIgnoreCase search
 
     _mergeWithOperators: (fields) =>
       _.flatMap fields, (field) =>
