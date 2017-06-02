@@ -1,8 +1,9 @@
 _ = require("lodash")
 should = require("should")
 Qs2Mongo = require("./qs2mongo")
+{ ObjectId } = require("mongodb")
 Manual = require("./schemas/manual")
-{ qs2mongo, req, multigetReq, aDate, dateReq, aNumber, numberReq } = {}
+{ qs2mongo, req, multigetReq, aDate, dateReq, aNumber, numberReq, anObjectId, objectIdReq } = {}
   
 describe "Qs2Mongo", ->
   beforeEach ->
@@ -20,11 +21,14 @@ describe "Qs2Mongo", ->
     dateReq = query: aDateField: aDate.toISOString()
     aNumber = 42
     numberReq = query: aNumberField: aNumber.toString()
+    anObjectId = "5919e3f5b89e9defa593734d"
+    objectIdReq = query: anObjectIdField: anObjectId
 
     schema = new Manual
       filterableBooleans: ["aBooleanField"]
       filterableDates: ["aDateField"]
       filterableNumbers: ["aNumberField"]
+      filterableObjectIds: ["anObjectIdField"]
     
     qs2mongo = new Qs2Mongo {
       schema
@@ -161,6 +165,15 @@ describe "Qs2Mongo", ->
       .filters.should.eql
         aNumberField: aNumber
 
+    it "should get objectid filters as objectids", ->
+      qs2mongo.parse objectIdReq, strict: true
+      .filters.should.eql
+        anObjectIdField: new ObjectId anObjectId
+
+    it "should get objectid filters as objectids without strict", ->
+      qs2mongo.parse objectIdReq
+      .filters.should.eql
+        anObjectIdField: new ObjectId anObjectId
 
     describe "Multiget", ->
         
@@ -261,3 +274,7 @@ describe "Qs2Mongo", ->
           .filters.should.eql
             $or: [{aField:"asdf"}]
         
+        it "should omit filter if operand has value outside its domain in $or operand without strict", ->
+          qs2mongo.parse {query: "aField,aNumberField": "asdf"}
+          .filters.should.eql
+            $or: [{aField:/asdf/i}]

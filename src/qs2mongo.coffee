@@ -18,6 +18,7 @@ module.exports =
         booleans: @schema.booleans()
         dates: @schema.dates()
         numbers: @schema.numbers()
+        objectIds: @schema.objectIds()
         @omitableProperties
       }
 
@@ -100,15 +101,24 @@ module.exports =
     buildSearch: ({query}) =>
       filters = _.clone query
       filterableDates = @_mergeWithOperators @schema.dates()
+      filterableNumbers = @_mergeWithOperators @schema.numbers()
+      filterableObjectIds = @_mergeWithOperators @schema.objectIds()
+      filterableBooleans = @_mergeWithOperators @schema.booleans()
       search = _.omit filters, 
-        @schema.booleans()
-        .concat @omitableProperties
+        filterableBooleans
         .concat filterableDates
+        .concat filterableNumbers
+        .concat filterableObjectIds
+        .concat @omitableProperties
       @_castFilters filters
-      booleans = _.pick filters, @schema.booleans()
+
+      booleans = _.pick filters, filterableBooleans
       dates = _.pick filters, filterableDates
+      numbers = _.pick filters, filterableNumbers
+      objectIds = _.pick filters, filterableObjectIds
       idFilters = @buildIdFilters filters.ids
-      _.merge booleans, dates, idFilters, @_asLikeIgnoreCase search
+      
+      _.merge numbers, objectIds, booleans, dates, idFilters, @_asLikeIgnoreCase search
 
     _mergeWithOperators: (fields) =>
       _.flatMap fields, (field) =>
