@@ -34,7 +34,6 @@ describe "Qs2Mongo", ->
       schema
       defaultSort: "_id"
     }
-    
 
   it "should build everything in a query string", ->
     qs2mongo.parse req
@@ -129,6 +128,28 @@ describe "Qs2Mongo", ->
         should.not.exist options.offset
 
   describe "Filters", ->
+
+    it "should attach multiple filters to one field if not using strict", ->
+      from = new Date("2017/06/03")
+      to = new Date("2017/07/02")
+      qs2mongo.parse
+        query:
+          aDateField__gte: from.toISOString()
+          aDateField__lt: to.toISOString()
+      .filters.should.eql
+        aDateField: { $gte: from, $lt: to }
+
+    it "should attach multiple filters to one field if using strict", ->
+      from = new Date("2017/06/03")
+      to = new Date("2017/07/02")
+      qs2mongo.parse
+        query:
+          aDateField__gte: from.toISOString()
+          aDateField__lt: to.toISOString()
+        , strict: true
+      .filters.should.eql
+        aDateField: { $gte: from, $lt: to }
+
     it "should build filters with like ignore case if not using strict", ->
       qs2mongo.parse req
       .filters.should.eql
