@@ -5,11 +5,55 @@
 		[
 			[
 				"op",
-				"operators"
+				"options"
+			],
+			[
+				"schea",
+				"schemas"
+			],
+			[
+				"cast",
+				"casteableFields"
 			],
 			[
 				"fil",
-				"filterableDates"
+				"filterableBooleans"
+			],
+			[
+				"obj",
+				"objectIdReq"
+			],
+			[
+				"or",
+				"orFilter"
+			],
+			[
+				"_",
+				"_value"
+			],
+			[
+				"o",
+				"operand"
+			],
+			[
+				"Typ",
+				"TypeTransformerDriver"
+			],
+			[
+				"type",
+				"TypeTransformerDriver"
+			],
+			[
+				"_pa",
+				"_pathsByType"
+			],
+			[
+				"T",
+				"TypeCaster"
+			],
+			[
+				"sc",
+				"Schema"
 			],
 			[
 				"q",
@@ -18,10 +62,6 @@
 			[
 				"a",
 				"aField"
-			],
-			[
-				"o",
-				"operator"
 			],
 			[
 				"fi",
@@ -86,10 +126,6 @@
 			[
 				"t",
 				"text"
-			],
-			[
-				"_",
-				"__reject"
 			],
 			[
 				"sty",
@@ -464,10 +500,6 @@
 				"comparingTable"
 			],
 			[
-				"T",
-				"TimelinesCtrl"
-			],
-			[
 				"Cam",
 				"campaignId"
 			],
@@ -482,48 +514,25 @@
 			[
 				"sta",
 				"stateParams"
-			],
-			[
-				"fo",
-				"form-control"
-			],
-			[
-				"col-",
-				"col-xs-48"
-			],
-			[
-				"for",
-				"form-group"
-			],
-			[
-				"btn-",
-				"btn-primary"
-			],
-			[
-				"rq",
-				"require"
-			],
-			[
-				"char",
-				"chartData"
-			],
-			[
-				"ro",
-				"rounded"
-			],
-			[
-				"mat",
-				"matchClause"
 			]
 		]
 	},
 	"buffers":
 	[
 		{
-			"file": "README.md",
+			"file": "src/qs2mongo.coffee",
 			"settings":
 			{
-				"buffer_size": 1446,
+				"buffer_size": 4936,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/qs2mongo.spec.coffee",
+			"settings":
+			{
+				"buffer_size": 9811,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -627,17 +636,30 @@
 	"expanded_folders":
 	[
 		"/home/juan/producteca/qs2mongo",
-		"/home/juan/producteca/qs2mongo/src"
+		"/home/juan/producteca/qs2mongo/src",
+		"/home/juan/producteca/qs2mongo/src/schemas"
 	],
 	"file_history":
 	[
-		"/home/juan/producteca/qs2mongo/src/qs2mongo.coffee",
-		"/home/juan/producteca/qs2mongo/package.json",
+		"/home/juan/producteca/qs2mongo/README.md",
 		"/home/juan/producteca/qs2mongo/src/qs2mongo.spec.coffee",
+		"/home/juan/producteca/qs2mongo/src/qs2mongo.coffee",
+		"/home/juan/producteca/qs2mongo/src/typeTransformerDriver.coffee",
+		"/home/juan/producteca/qs2mongo/src/schemas/index.coffee",
+		"/home/juan/producteca/qs2mongo/src/typeCaster.coffee",
+		"/home/juan/producteca/qs2mongo/src/schemas/mongoose.coffee",
+		"/home/juan/producteca/qs2mongo/src/schemas/manual.coffee",
+		"/home/juan/producteca/qs2mongo/package.json",
+		"/home/juan/producteca/qs2mongo/src/schemas/mongoose.spec.coffee",
+		"/home/juan/producteca/qs2mongo/src/index.coffee",
+		"/home/juan/producteca/qs2mongo/src/schema.manual.coffee",
+		"/home/juan/producteca/qs2mongo/src/schema.mongoose.coffee",
+		"/home/juan/producteca/qs2mongo/src/schema.example.coffee",
+		"/home/juan/producteca/qs2mongo/src/schema.coffee",
+		"/home/juan/producteca/qs2mongo/src/schema.js",
+		"/home/juan/producteca/qs2mongo/src/typeConverter.coffee",
 		"/home/juan/producteca/qs2mongo/src/middleware.coffee",
 		"/home/juan/producteca/qs2mongo/Gruntfile.coffee",
-		"/home/juan/producteca/qs2mongo/src/index.coffee",
-		"/home/juan/producteca/qs2mongo/README.md",
 		"/home/juan/producteca/melimonitor/server/api/campaigns/listings/listings.controller.spec.coffee",
 		"/home/juan/producteca/melimonitor/server/api/qs2mongo.coffee",
 		"/home/juan/producteca/melimonitor/server/api/campaigns/campaigns.controller.coffee",
@@ -746,23 +768,11 @@
 		"/home/juan/producteca/melimonitor/App_Data/jobs/triggered/priorityListingsUpdater/strategies/index.coffee",
 		"/home/juan/producteca/melimonitor/client/app/main/timelines/domain/campaignRelatedResolver.coffee",
 		"/home/juan/producteca/melimonitor/App_Data/jobs/continuous/positionsUpdater/run.coffee",
-		"/home/juan/producteca/melimonitor/server/config/local.env.sample.coffee",
-		"/home/juan/producteca/melimonitor/App_Data/jobs/triggered/campaignsUpdater/campaignsUpdater.coffee",
-		"/home/juan/producteca/melimonitor/server/domain/schemas/schemaFactory.coffee",
-		"/home/juan/producteca/melimonitor/server/domain/exceptions/conflict.coffee",
-		"/home/juan/producteca/melimonitor/server/srv-globals.js",
-		"/home/juan/producteca/melimonitor/server/domain/schemas/visitsSnapshot.model.coffee",
-		"/home/juan/producteca/melimonitor/server/specHelpers/mockedDoWithRedisLock.coffee",
-		"/home/juan/producteca/melimonitor/App_Data/jobs/continuous/dealsUpdater/run.coffee",
-		"/home/juan/producteca/melimonitor/server/domain/controllers/sales.controller.coffee",
-		"/home/juan/producteca/melimonitor/App_Data/jobs/triggered/dealFinisher/dealFinisher.coffee",
-		"/home/juan/producteca/melimonitor/server/domain/controllers/base.controller.coffee",
-		"/home/juan/producteca/melimonitor/server/api/campaigns/index.coffee",
-		"/home/juan/producteca/melimonitor/App_Data/jobs/triggered/dealRemover/dealRemover.coffee"
+		"/home/juan/producteca/melimonitor/server/config/local.env.sample.coffee"
 	],
 	"find":
 	{
-		"height": 35.0
+		"height": 34.0
 	},
 	"find_in_files":
 	{
@@ -904,6 +914,62 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"$in",
+			"in'",
+			"custom",
+			"schema",
+			"schema.",
+			" $in operands to number when field es numeric without st",
+			"t objectid filters as objectids without str",
+			"objectids",
+			"filterableObjectIds",
+			"operand has value outside its domain in $or operand without str",
+			".only",
+			"s to number when field is n",
+			"buildfilters",
+			"castFilters",
+			"st $in operands to number whe",
+			"$or",
+			"or",
+			"parseoperator",
+			".source or ",
+			"$in",
+			"in",
+			"MySchema",
+			"schema.",
+			"@filterableNumbers",
+			"@filterableDates",
+			"@filterableBooleans",
+			"Qs2Mongo",
+			"Schema",
+			"filterable",
+			"*",
+			"operators",
+			"aNumber",
+			"number",
+			"date",
+			"castfil",
+			"stringToBoolean",
+			"transformation",
+			"mergewith",
+			"_castFilters",
+			"castBooleanFilters",
+			"te filters as dat",
+			".only",
+			"_castFilters",
+			"like ignore case if not us",
+			"ate filters as date",
+			"_castFilters",
+			"castboo",
+			"castBooleanFilters",
+			"_omitableProperties",
+			"@castDateFilters",
+			"      @castDateFilters filters",
+			"castDateFilters",
+			"@castDateFilters",
+			"castDateFilters",
+			"castBooleanFilters",
+			"defaultSort",
 			"console.log",
 			"buildsearch",
 			"console.log",
@@ -975,63 +1041,7 @@
 			"-",
 			"saveall",
 			"initial_quantity",
-			"_updateDealDates",
-			"getoptions",
-			"requestretry",
-			"request-retry",
-			"start_time",
-			"quantity",
-			"cloud-d",
-			"../../../../server/services/redis",
-			"_.assign process.env, try include(\"config/local.env\")",
-			"addFilters",
-			"_getAllPositionedListings",
-			"_getOnlyNewUnpositionedListings",
-			"@_getJSONMembers @positionedKey",
-			"getjsonmembers",
-			"newUnpositionedKey",
-			"_getOnlyNewUnpositionedListings",
-			"_getJSONMembers",
-			"_getNewPositionedListings",
-			"getnewlistings",
-			"skip",
-			"xit",
-			"myredis",
-			"Redis = include(\"services/myredis\")",
-			"myredis",
-			"@gl",
-			"@glb",
-			"myredis",
-			"services/redis",
-			"app_data",
-			"test",
-			"test:server",
-			"test",
-			"include(\"specHelpers/mockedRedis\")()\n",
-			"redis",
-			"agent",
-			".app",
-			"medis",
-			"mocked",
-			"mock",
-			"_getOnlyNewUnpositionedListings",
-			"MLB763762832",
-			"_getAllPositionedListings",
-			"unpositioned",
-			"console.log",
-			"configureSuggestions",
-			"previousSellers",
-			"_",
-			"addBearerButton",
-			"proxyqu",
-			"proxyque",
-			"moment",
-			"doTheThang",
-			"getSellerId",
-			"-created",
-			"newDiv",
-			"console.log",
-			"media-object"
+			"_updateDealDates"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1039,6 +1049,13 @@
 		"regex": false,
 		"replace_history":
 		[
+			"Manual",
+			"@schema.",
+			"schema.numbers()",
+			"schema.dates()",
+			"schema.booleans()",
+			"schema",
+			"",
 			"20",
 			"10",
 			"qs2mongo",
@@ -1159,13 +1176,7 @@
 			"@",
 			"filteredCampaigns",
 			"endCreation",
-			"deal_id",
-			"$routeParams",
-			"9",
-			"48",
-			"updater",
-			"_updateListings",
-			"updateListings"
+			"deal_id"
 		],
 		"reverse": false,
 		"show_context": true,
@@ -1176,32 +1187,64 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 1,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "README.md",
+					"file": "src/qs2mongo.coffee",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1446,
+						"buffer_size": 4936,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								636,
-								636
+								2895,
+								2895
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Markdown/Markdown.sublime-syntax"
+							"syntax": "Packages/Better CoffeeScript/CoffeeScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": -0.0,
+						"translation.y": 950.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "src/qs2mongo.spec.coffee",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 9811,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								7304,
+								7304
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Better CoffeeScript/CoffeeScript.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 19.0,
+						"translation.y": 4010.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -1249,7 +1292,7 @@
 	"project": "qs2mongo.sublime-project",
 	"replace":
 	{
-		"height": 64.0
+		"height": 62.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -1259,8 +1302,28 @@
 		"selected_items":
 		[
 			[
+				"dri",
+				"src/typeTransformerDriver.coffee"
+			],
+			[
+				"ty",
+				"src/typeCaster.coffee"
+			],
+			[
 				"pack",
 				"package.json"
+			],
+			[
+				"pak",
+				"package.json"
+			],
+			[
+				"qs",
+				"src/qs2mongo.coffee"
+			],
+			[
+				"sch",
+				"src/schema.coffee"
 			],
 			[
 				"qs2",
@@ -1277,10 +1340,6 @@
 			[
 				"campaspe",
 				"server/api/campaigns/campaigns.controller.spec.coffee"
-			],
-			[
-				"qs",
-				"server/api/qs2mongo.coffee"
 			],
 			[
 				"listingscon",
@@ -1753,34 +1812,26 @@
 			[
 				"localen",
 				"server/config/local.env.coffee"
-			],
-			[
-				"listinupd",
-				"App_Data/jobs/continuous/listingsUpdater/run.coffee"
-			],
-			[
-				"merc",
-				"server/services/mercadolibre.coffee"
-			],
-			[
-				"apispec",
-				"server/api/campaigns/listings/listings.controller.spec.coffee"
-			],
-			[
-				"queured",
-				"server/services/queueReader.coffee"
 			]
 		],
 		"width": 0.0
 	},
 	"select_project":
 	{
-		"height": 0.0,
+		"height": 500.0,
 		"last_filter": "",
 		"selected_items":
 		[
+			[
+				"cus",
+				"~/producteca/couriers-api/couriers-api.sublime-project"
+			],
+			[
+				"",
+				"~/producteca/webpack/sincromonitor/reactgo.sublime-project"
+			]
 		],
-		"width": 0.0
+		"width": 380.0
 	},
 	"select_symbol":
 	{
