@@ -63,7 +63,7 @@ module.exports =
         name = field.replace "__#{operator}", ""
         @_parseOperator name, operator, value
       rv = {}
-      filtersWithOperators.forEach (it) => _.assign rv, it
+      filtersWithOperators.forEach (it) => _.merge rv, it
       @_castOrOperands rv
     
     _castOrOperands: (filters) => 
