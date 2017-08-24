@@ -7,7 +7,7 @@ module.exports =
       Object.keys @Schema.paths
     
     _pathsByType: (type) => 
-      @_paths().filter (path) => type is @Schema.paths[path].instance
+      @_paths().filter (path) => type.toLowerCase() is @Schema.paths[path].instance.toLowerCase()
 
     numbers: => @_pathsByType 'Number'
 
