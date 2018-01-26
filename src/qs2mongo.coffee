@@ -152,7 +152,7 @@ module.exports =
 
     buildIdFilters: (ids) =>
       if ids?
-        $in = ids.split(",")
+        $in = ids.split(",").map (id) => @_castByName @multigetIdField, id
         _({})
         .update @multigetIdField, => { $in }
         .value()
