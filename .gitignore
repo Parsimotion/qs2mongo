@@ -38,3 +38,4 @@ jspm_packages
 
 # Ignore build
 lib
+qs2mongo.sublime-workspace
