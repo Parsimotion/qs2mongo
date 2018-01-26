@@ -171,6 +171,12 @@ describe "Qs2Mongo", ->
           { fields: "theOrValue" }
           { joinedByOr: "theOrValue" }
         ]
+    
+    it "should get multiple values in regex as and if not using strict", ->
+      qs2mongo.parse query: name: ["juan", "jacobs"]
+      .filters.should.eql
+        name: /^(?=.*?juan)(?=.*?jacobs)/i
+
     it "should get date filters as dates", ->
       qs2mongo.parse dateReq, strict: true
       .filters.should.eql
