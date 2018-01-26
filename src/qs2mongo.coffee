@@ -129,11 +129,15 @@ module.exports =
         Qs2Mongo.operators.map (it)=> "#{field}__#{it}"
           .concat field
 
-    _asLikeIgnoreCase: (search) ->
-      _.reduce search, ((result, value, field) ->
-        result[field] = new RegExp "#{value}", 'i'
+    _asLikeIgnoreCase: (search) =>
+      _.reduce search, ((result, value, field) =>
+        regex = if _.isArray(value) then @_arrayAndRegex(value) else value
+        result[field] = new RegExp "#{regex}", 'i'
         result
       ), {}
+
+    _arrayAndRegex: (array) ->
+      "^" + array.map((it) => "(?=.*?#{it})").join("");
 
     buildSort: (field = @defaultSort) =>
       if field?
