@@ -5,6 +5,8 @@ module.exports =
   class TypeCaster
     @operators: [ 'lt', 'gt','lte', 'gte','in','nin','eq' ] #TODO: Sacar esto de aca
 
+    @TypeTransformerDriver: TypeTransformerDriver
+    
     constructor: (opts) -> 
       _.assign @, opts
       #flowRight === compose
