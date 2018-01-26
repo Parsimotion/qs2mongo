@@ -3,7 +3,7 @@ should = require("should")
 Qs2Mongo = require("./qs2mongo")
 { ObjectId } = require("mongodb")
 Manual = require("./schemas/manual")
-{ qs2mongo, req, multigetReq, aDate, dateReq, aNumber, numberReq, anObjectId, objectIdReq } = {}
+{ qs2mongo, req, multigetReq, multigetObjectIdReq, aDate, dateReq, aNumber, numberReq, anObjectId, objectIdReq } = {}
   
 describe "Qs2Mongo", ->
   beforeEach ->
@@ -23,6 +23,7 @@ describe "Qs2Mongo", ->
     numberReq = query: aNumberField: aNumber.toString()
     anObjectId = "5919e3f5b89e9defa593734d"
     objectIdReq = query: anObjectIdField: anObjectId
+    multigetObjectIdReq = query: ids: anObjectId
 
     schema = new Manual
       filterableBooleans: ["aBooleanField"]
@@ -220,6 +221,12 @@ describe "Qs2Mongo", ->
         .filters.should.eql
           custom_id: $in: ["unId","otroId"]
 
+      it "should build multiget filters casting to proper type", ->
+        qs2mongo.multigetIdField = "anObjectIdField"
+        qs2mongo.parse multigetObjectIdReq
+        .filters.should.eql
+          anObjectIdField: $in: [ new ObjectId anObjectId ]
+
     describe "Operators", ->
 
       it "should build filters with operator", ->
@@ -311,7 +318,7 @@ describe "Qs2Mongo", ->
         it "should omit filter if date operand has value outside its domain in $or operand ", ->
           qs2mongo.parse {query: "aField,aDateField,anObjectIdField": anObjectId}, strict: true
           .filters.should.eql
-            $or: [{aField:anObjectId}, {anObjectIdField: new ObjectId anObjectId}]
+            $or: [{aField:anObjectId}, { anObjectIdField: new ObjectId anObjectId }]
         
         it "should omit filter if operand has value outside its domain in $or operand without strict", ->
           qs2mongo.parse {query: "aField,aNumberField": "asdf"}
