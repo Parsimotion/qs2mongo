@@ -523,17 +523,7 @@
 			"file": "src/qs2mongo.coffee",
 			"settings":
 			{
-				"buffer_size": 4936,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "src/qs2mongo.spec.coffee",
-			"settings":
-			{
-				"buffer_size": 9811,
-				"encoding": "UTF-8",
+				"buffer_size": 4935,
 				"line_ending": "Unix"
 			}
 		}
@@ -641,13 +631,13 @@
 	],
 	"file_history":
 	[
-		"/home/juan/producteca/qs2mongo/README.md",
-		"/home/juan/producteca/qs2mongo/src/qs2mongo.spec.coffee",
+		"/home/juan/producteca/qs2mongo/src/schemas/mongoose.coffee",
 		"/home/juan/producteca/qs2mongo/src/qs2mongo.coffee",
+		"/home/juan/producteca/qs2mongo/src/qs2mongo.spec.coffee",
+		"/home/juan/producteca/qs2mongo/README.md",
 		"/home/juan/producteca/qs2mongo/src/typeTransformerDriver.coffee",
 		"/home/juan/producteca/qs2mongo/src/schemas/index.coffee",
 		"/home/juan/producteca/qs2mongo/src/typeCaster.coffee",
-		"/home/juan/producteca/qs2mongo/src/schemas/mongoose.coffee",
 		"/home/juan/producteca/qs2mongo/src/schemas/manual.coffee",
 		"/home/juan/producteca/qs2mongo/package.json",
 		"/home/juan/producteca/qs2mongo/src/schemas/mongoose.spec.coffee",
@@ -772,7 +762,7 @@
 	],
 	"find":
 	{
-		"height": 34.0
+		"height": 41.0
 	},
 	"find_in_files":
 	{
@@ -914,6 +904,10 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"_makeOrFilters",
+			"_castByName",
+			"and",
+			"__",
 			"$in",
 			"in'",
 			"custom",
@@ -1037,11 +1031,7 @@
 			"_omitableProperties()",
 			"_omitableProperties",
 			"RequestQueueWriter",
-			"getAll",
-			"-",
-			"saveall",
-			"initial_quantity",
-			"_updateDealDates"
+			"getAll"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1187,7 +1177,7 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 0,
 			"sheets":
 			[
 				{
@@ -1196,45 +1186,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4936,
+						"buffer_size": 4935,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2895,
-								2895
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Better CoffeeScript/CoffeeScript.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": -0.0,
-						"translation.y": 950.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "src/qs2mongo.spec.coffee",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 9811,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								7304,
-								7304
+								2864,
+								2873
 							]
 						],
 						"settings":
@@ -1244,7 +1204,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 4010.0,
+						"translation.y": 494.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -1255,7 +1215,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 27.0
+		"height": 28.0
 	},
 	"input":
 	{
@@ -1292,7 +1252,7 @@
 	"project": "qs2mongo.sublime-project",
 	"replace":
 	{
-		"height": 62.0
+		"height": 52.0
 	},
 	"save_all_on_build": true,
 	"select_file":
@@ -1301,6 +1261,10 @@
 		"last_filter": "",
 		"selected_items":
 		[
+			[
+				"qs",
+				"src/qs2mongo.coffee"
+			],
 			[
 				"dri",
 				"src/typeTransformerDriver.coffee"
@@ -1316,10 +1280,6 @@
 			[
 				"pak",
 				"package.json"
-			],
-			[
-				"qs",
-				"src/qs2mongo.coffee"
 			],
 			[
 				"sch",
@@ -1819,9 +1779,17 @@
 	"select_project":
 	{
 		"height": 500.0,
-		"last_filter": "",
+		"last_filter": "melimo",
 		"selected_items":
 		[
+			[
+				"melimo",
+				"~/producteca/melimonitor/melimonitor.sublime-project"
+			],
+			[
+				"web",
+				"~/producteca/web-client/web-client.sublime-project"
+			],
 			[
 				"cus",
 				"~/producteca/couriers-api/couriers-api.sublime-project"
