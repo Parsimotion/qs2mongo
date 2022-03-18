@@ -13,7 +13,7 @@ module.exports =
       new @ _.merge { schema: new schemas.Manual fields }, options
 
     @defaultOmitableProperties: ['by', 'ids', 'attributes', 'offset', 'limit', 'sort' ]
-    @operators: [ 'lt', 'gt','lte', 'gte','in','nin','eq' ]
+    @operators: [ 'lt', 'gt','lte', 'gte','in','nin','eq', 'ne', 'exists' ]
 
     constructor: ({ 
       @schema
