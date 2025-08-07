@@ -21,7 +21,7 @@ describe "Qs2Mongo", ->
     dateReq = query: aDateField: aDate.toISOString()
     aNumber = 42
     numberReq = query: aNumberField: aNumber.toString()
-    anObjectId = "5919e3f5b89e9defa593734d"
+    anObjectId = new ObjectId("5919e3f5b89e9defa593734d")
     objectIdReq = query: anObjectIdField: anObjectId
     multigetObjectIdReq = query: ids: anObjectId
 
