@@ -87,3 +87,4 @@ Default driver is mongodb. If you'd like to use a custom mongodb driver, you mus
 Note: Your conversion must return the properly converted value if `it` is valid or `undefined` otherwise.
 
 Specify the path to your implementation in process.env.QS_TRANSFORMER_DRIVER
+
