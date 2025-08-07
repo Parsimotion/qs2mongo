@@ -1,0 +1,29 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  workflow_dispatch:
+    inputs:
+      prereleaseTag:
+        description: 'Nombre del prerelease tag (ej: alpha, beta)'
+        required: false
+        default: 'alpha'
+
+jobs:
+  release:
+    name: Build&Release
+    uses: Parsimotion/public-workflows/.github/workflows/release.yml@main
+    with:
+      prereleaseTag: ${{ inputs.prereleaseTag }}
+      nodeVersion: "18"
+      build-output-path: "lib"
+      bun: true
+    secrets:
+      NPM_PUBLISH_TOKEN: ${{ secrets.NPM_PUBLISH_TOKEN }}
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
