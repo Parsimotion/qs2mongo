@@ -1,4 +1,4 @@
-# qs2mongo
+# qs2mongo 
 
 [![NPM version](https://badge.fury.io/js/qs2mongo.png)](http://badge.fury.io/js/qs2mongo)
 
